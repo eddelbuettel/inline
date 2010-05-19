@@ -1,0 +1,10 @@
+import("methods")
+
+export(
+  "cfunction"
+)
+
+exportMethods(
+  "setCMethod"
+)
+
