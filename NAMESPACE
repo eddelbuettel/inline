@@ -5,6 +5,6 @@ export(
 )
 
 exportMethods(
-  "setCMethod"
+  "setCMethod", "getDynLib"
 )
 
