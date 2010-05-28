@@ -1,0 +1,11 @@
+0.3.5	(under development)
+
+	o	new R function "cxxfunction" to generate an R function with inlined
+	C++ code using the .Call calling convention. The function was introduced
+	to accomodate the needs of the Rcpp family of packages. 
+	
+	cxxfunction uses a plugin system and currently plugins "default", "Rcpp" and 
+	"RcppArmadillo" are included.
+
+	o	new R functions "getPlugin" and "registerPlugin" to manage the 
+	plugin system of cxxfunction
