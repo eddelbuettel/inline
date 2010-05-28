@@ -1,59 +1,6 @@
 
 plugins <- new.env()
 
-Makevars.Rcpp <- '
-## Use the R_HOME indirection to support installations of multiple R version
-PKG_LIBS = $(shell $(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()" )
-'
-
-Makevars.win.Rcpp <- '
-## Use the R_HOME indirection to support installations of multiple R version
-PKG_LIBS = $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::LdFlags()")
-'
-
-Makevars.RcppArmadillo <- '
-PKG_LIBS = $(shell $(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()" ) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
-'
-Makevars.win.RcppArmadillo <- '
-PKG_LIBS = $(shell $(R_HOME)/bin${R_ARCH_BIN}/Rscript.exe -e "Rcpp:::LdFlags()") $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
-'
-
-
-Rcpp.plugin.maker <- function( include.before = "", include.after = "", 
-	LinkingTo = "Rcpp", Depends = "Rcpp", libs = "", 
-	Makevars = Makevars.Rcpp, 
-	Makevars.win = Makevars.win.Rcpp
-){
-	function( ... ){
-includes <- sprintf( "%s
-#include <Rcpp.h>
-%s
-
-#ifndef BEGIN_RCPP
-#define BEGIN_RCPP
-#endif
-
-#ifndef END_RCPP
-#define END_RCPP
-#endif
-
-using namespace Rcpp;
-", include.before, include.after )
-
-	list( 
-		env = list( PKG_LIBS = paste( Rcpp:::RcppLdFlags(), libs ) ), 
-		includes = includes, 
-		LinkingTo = LinkingTo , 
-		body = function( x ){
-			sprintf( "BEGIN_RCPP\n%s\nEND_RCPP", x )	
-		}, 
-		Depends = Depends, 
-		Makevars = Makevars, 
-		Makevars.win = Makevars.win
-	)
-}
-}
-
 plugins[["default"]] <- function( ){
 	includes = '#include <R.h>
 #include <Rdefines.h>
@@ -65,24 +12,23 @@ plugins[["default"]] <- function( ){
 	)
 }
 
-plugins[["Rcpp"]] <- Rcpp.plugin.maker() 
-plugins[["RcppArmadillo"]] <- Rcpp.plugin.maker(
-	include.before = "#include <RcppArmadillo.h>", 
-	LinkingTo = c("Rcpp", "RcppArmadillo"), 
-	Depends = c("Rcpp", "RcppArmadillo"),
-	libs = "$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)", 
-	Makevars = Makevars.RcppArmadillo, 
-	Makevars.win = Makevars.win.RcppArmadillo
-)
-
 registerPlugin <- function( name, plugin ){
 	plugins[[ name ]] <- plugin
 }
 getPlugin <- function( name, ... ){
-	if( !name %in% ls( plugins ) ){
-		stop( sprintf( "no such inline plugin : '%s' ", name ) )
+	if( name %in% ls( plugins ) ){
+		plugins[[ name ]]( ... )
+	} else if( sprintf("package-%s", name) %in% search() || require( name, character.only = TRUE, quietly = TRUE) ){
+		plugin <- get( "inline_cxx_plugin" , asNamespace(name) )
+		if( is.null(plugin) ){
+			stop( sprintf( "package '%s' does not define an inline plugin", name ) )
+		}
+		registerPlugin( name, plugin )
+		plugin( ... )
+	} else {
+		stop( sprintf( "could not find plugin '%s'", name ) )
 	}
-	plugins[[ name ]]( ... )
+	
 }
    
 paste0 <- function(...) paste(..., sep="")

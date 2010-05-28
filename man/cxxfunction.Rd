@@ -15,10 +15,7 @@ cxxfunction(sig = character(), body = character(),
 \arguments{
   \item{sig}{Signature of the function. A named character vector}
   \item{body}{A character vector with C++ code to include in the body of the compiled C++ function}
-  \item{plugin}{Name of the plugin to use. 
-  Currently plugins "default", "Rcpp" and "RcppArmadillo" are available. 
-  See \code{\link{getPlugin}} for details about plugins.
-  }
+  \item{plugin}{Name of the plugin to use. See \code{\link{getPlugin}} for details about plugins. }
   \item{includes}{User includes, inserted after the includes provided by the plugin. }
   \item{settings}{Result of the call to the plugin}
   \item{\dots}{Further arguments to the plugin}

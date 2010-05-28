@@ -4,11 +4,8 @@
 	C++ code using the .Call calling convention. The function was introduced
 	to accomodate the needs of the Rcpp family of packages. 
 	
-	cxxfunction uses a plugin system and currently plugins "default", "Rcpp" and 
-	"RcppArmadillo" are included.
-
 	o	new R functions "getPlugin" and "registerPlugin" to manage the 
-	plugin system of cxxfunction
+	plugin system of cxxfunction. 
 	
 	o	The function package.skeleton (from utils) is made generic and a
 	method is available to generate a package skeleton from a function 

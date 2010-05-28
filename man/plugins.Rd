@@ -35,6 +35,15 @@ plugins are functions that return a list with :
 	variable.
 	}
 }
+
+plugins can be manually registered using the \code{registerPlugin}
+function. Alternatively, a package may supply an inline plugin 
+implicitely by defining a function called \code{inline_cxx_plugin}, which 
+does not necessarily need to be exported from the namespace of the package.
+
+Known packages implementing this scheme include \code{Rcpp} and 
+\code{RcppArmadillo}. 
+
 }
 \value{
 	\code{getPlugin} retrieves the plugin and invokes it with the
