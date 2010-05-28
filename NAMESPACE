@@ -1,7 +1,7 @@
 import("methods")
 
 export(
-  "cfunction"
+  "cfunction", "cxxfunction", "getPlugin", "registerPlugin"
 )
 
 exportMethods(
