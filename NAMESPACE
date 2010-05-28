@@ -1,10 +1,11 @@
 import("methods")
+importFrom( "utils", "package.skeleton" )
 
 export(
   "cfunction", "cxxfunction", "getPlugin", "registerPlugin"
 )
 
 exportMethods(
-  "setCMethod", "getDynLib"
+  "setCMethod", "getDynLib", "package.skeleton"
 )
 

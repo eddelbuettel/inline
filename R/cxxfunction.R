@@ -1,7 +1,29 @@
 
 plugins <- new.env()
 
-Rcpp.plugin.maker <- function( include.before = "", include.after = "", LinkingTo = "Rcpp", libs = "" ){
+Makevars.Rcpp <- '
+## Use the R_HOME indirection to support installations of multiple R version
+PKG_LIBS = $(shell $(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()" )
+'
+
+Makevars.win.Rcpp <- '
+## Use the R_HOME indirection to support installations of multiple R version
+PKG_LIBS = $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e "Rcpp:::LdFlags()")
+'
+
+Makevars.RcppArmadillo <- '
+PKG_LIBS = $(shell $(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()" ) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+'
+Makevars.win.RcppArmadillo <- '
+PKG_LIBS = $(shell $(R_HOME)/bin${R_ARCH_BIN}/Rscript.exe -e "Rcpp:::LdFlags()") $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+'
+
+
+Rcpp.plugin.maker <- function( include.before = "", include.after = "", 
+	LinkingTo = "Rcpp", Depends = "Rcpp", libs = "", 
+	Makevars = Makevars.Rcpp, 
+	Makevars.win = Makevars.win.Rcpp
+){
 	function( ... ){
 includes <- sprintf( "%s
 #include <Rcpp.h>
@@ -24,7 +46,10 @@ using namespace Rcpp;
 		LinkingTo = LinkingTo , 
 		body = function( x ){
 			sprintf( "BEGIN_RCPP\n%s\nEND_RCPP", x )	
-		}
+		}, 
+		Depends = Depends, 
+		Makevars = Makevars, 
+		Makevars.win = Makevars.win
 	)
 }
 }
@@ -44,7 +69,10 @@ plugins[["Rcpp"]] <- Rcpp.plugin.maker()
 plugins[["RcppArmadillo"]] <- Rcpp.plugin.maker(
 	include.before = "#include <RcppArmadillo.h>", 
 	LinkingTo = c("Rcpp", "RcppArmadillo"), 
-	libs = "$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)"
+	Depends = c("Rcpp", "RcppArmadillo"),
+	libs = "$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)", 
+	Makevars = Makevars.RcppArmadillo, 
+	Makevars.win = Makevars.win.RcppArmadillo
 )
 
 registerPlugin <- function( name, plugin ){
@@ -137,8 +165,10 @@ SEXP %s( %s ){
 		writeLines( addLineNumbers( code ) )
 	}
 	
+	language <- "C++"
+	
 	## WRITE AND COMPILE THE CODE
-  	libLFile <- compileCode( f, code, language = "C++", verbose = verbose ) 
+  	libLFile <- compileCode( f, code, language = language, verbose = verbose ) 
 	
 	## SET A FINALIZER TO PERFORM CLEANUP
   	cleanup <- function(env) {
@@ -173,6 +203,9 @@ SEXP %s( %s ){
   	body(fn)[[4]] <- body
   	## set fn as THE function in CFunc of res[[i]]
   	res@.Data <- fn
+  	
+  	## clear the environment
+  	rm( j )
   	
   	res
 }
