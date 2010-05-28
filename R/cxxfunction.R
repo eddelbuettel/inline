@@ -19,7 +19,7 @@ getPlugin <- function( name, ... ){
 	if( name %in% ls( plugins ) ){
 		plugins[[ name ]]( ... )
 	} else if( sprintf("package-%s", name) %in% search() || require( name, character.only = TRUE, quietly = TRUE) ){
-		plugin <- get( "inline_cxx_plugin" , asNamespace(name) )
+		plugin <- get( "inlineCxxPlugin" , asNamespace(name) )
 		if( is.null(plugin) ){
 			stop( sprintf( "package '%s' does not define an inline plugin", name ) )
 		}
