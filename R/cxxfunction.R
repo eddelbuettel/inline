@@ -50,20 +50,36 @@ cxxfunction <- function (
 		
 	f <- basename( tempfile( ) )	
 	
-	signature <- if( ! length( sig ) ){ "" } else {
-		paste( sprintf( "SEXP %s", names(sig) ), collapse = ", " )
+	if( ! is.list( sig ) ){
+		sig <- list( sig )
+		names( sig ) <- f
+		if( ! length( body ) ) body <- ""
+		names( body ) <- f
 	}
+	if( length(sig) != length(body) )
+	    stop("mismatch between the number of functions declared in 'sig' and the number of function bodies provided in 'body'")
+	    
+	signature <- lapply( sig, function(x) {
+		if( ! length(x) ){ 
+			"" 
+		} else {
+			paste( sprintf( "SEXP %s", names(x) ), collapse = ", " )
+		} 
+	} )
 	
-	decl <- sprintf( 'extern "C" {
-	SEXP %s( %s) ;
-}
-', f, signature )
+	decl <- lapply( 1:length(sig) , function(index) {
+		sprintf( 'SEXP %s( %s) ;', names(signature)[index] , signature[[index]] ) 
+	} )
 
-	def <- sprintf( '
+	def <- lapply( 1:length(sig), function(index){
+		sprintf( '
 SEXP %s( %s ){
 %s
 }
-', f, signature, if(is.null(settings$body)) body else settings$body(body) )
+', names(signature)[index], 
+	signature[[index]], 
+	if(is.null(settings$body)) body[[index]] else settings$body(body[[index]]) )
+	} )
 	
 	settings_includes <- if( is.null( settings$includes ) ) "" else paste( settings$includes, collapse = "\n" )
 
@@ -74,12 +90,17 @@ SEXP %s( %s ){
 %s
 
 // declaration
+extern "C" {
 %s
+}
 
 // definition
 %s
 
-', settings_includes , paste( includes, collapse = "\n" ), decl, def )
+', settings_includes , paste( includes, collapse = "\n" ), 
+	paste( decl, collapse = "\n" ), 
+	paste( def, collapse = "\n") 
+	)
 
 	
 	if( !is.null( env <- settings$env ) ){
@@ -116,7 +137,7 @@ SEXP %s( %s ){
 	## WRITE AND COMPILE THE CODE
   	libLFile <- compileCode( f, code, language = language, verbose = verbose ) 
 	
-	## SET A FINALIZER TO PERFORM CLEANUP
+  	## SET A FINALIZER TO PERFORM CLEANUP
   	cleanup <- function(env) {
   	  if ( f %in% names(getLoadedDLLs()) ) dyn.unload(libLFile)
   	  unlink(libLFile)
@@ -125,34 +146,40 @@ SEXP %s( %s ){
     
   	## Create new objects of class CFunc, each containing the code of ALL inline
   	## functions. This will be used to recompile the whole shared lib when needed
-  	res <- new("CFunc", code = code)
+  	res <- vector("list", length(sig))
+  	names(res) <- names(sig)
+  	res <- new( "CFuncList", res )
   	
-  	## this is the skeleton of the function, the external call is added below using 'body'
-  	## important here: all variables are kept in the local environment
-  	fn <- function(arg) {
-  	  if ( !file.exists(libLFile) )
-  	    libLFile <<- compileCode(f, code, "C++", verbose)
-  	  if ( !( f %in% names(getLoadedDLLs()) ) ) dyn.load(libLFile)
+  	for( i in seq_along(sig) ){
+  		res[[i]] <- new( "CFunc", code = code )
+  		
+  		## this is the skeleton of the function, the external call is added below using 'body'
+  		## important here: all variables are kept in the local environment
+  		fn <- function(arg) {
+  		  if ( !file.exists(libLFile) )
+  		    libLFile <<- compileCode(f, code, "C++", verbose)
+  		  if ( !( f %in% names(getLoadedDLLs()) ) ) dyn.load(libLFile)
+  		}
+  		
+    	## Modify the function formals to give the right argument list
+    	args <- formals(fn)[ rep(1, length(sig[[i]])) ]
+    	names(args) <- names(sig[[i]])
+    	formals(fn) <- args
+  		
+    	## create .C/.Call function call that will be added to 'fn'
+  		body <- quote( .Call( "EXTERNALNAME", PACKAGE=f, ARG) )[ c(1:3, rep(4, length(sig[[i]]))) ]
+  		for ( j in seq(along = sig[[i]]) ) body[[j+3]] <- as.name(names(sig[[i]])[j])
+  	
+  		body[[2]] <- f
+  		## update the body of 'fn'
+  		body(fn)[[4]] <- body
+  		## set fn as THE function in CFunc of res[[i]]
+  		res[[i]]@.Data <- fn
   	}
-  	
-  	## Modify the function formals to give the right argument list
-  	args <- formals(fn)[ rep(1, length(sig)) ]
-  	names(args) <- names(sig)
-  	formals(fn) <- args
-  	
-  	## create .C/.Call function call that will be added to 'fn'
-  	  body <- quote( .Call( "EXTERNALNAME", PACKAGE=f, ARG) )[ c(1:3, rep(4, length(sig))) ]
-  	  for ( j in seq(along = sig) ) body[[j+3]] <- as.name(names(sig)[j])
-  	
-  	body[[2]] <- f
-  	## update the body of 'fn'
-  	body(fn)[[4]] <- body
-  	## set fn as THE function in CFunc of res[[i]]
-  	res@.Data <- fn
   	
   	## clear the environment
   	rm( j )
   	
-  	res
+  	if( identical( length(sig), 1L ) ) res[[1L]] else res
 }
 

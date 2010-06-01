@@ -23,3 +23,5 @@ function( x ){
 	dll
 } )
 
+setMethod( "getDynLib", signature( x = "CFuncList" ), function(x) getDynLib( x[[1L]] ) )
+

@@ -9,6 +9,8 @@ setClass("CFunc",
   contains="function"
 )
 
+setClass( "CFuncList", contains = "list" )
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 cfunction <- function(sig=character(), body=character(), includes=character(), otherdefs=character(),
                       language=c("C++", "C", "Fortran", "F95", "ObjectiveC", "ObjectiveC++"),
@@ -216,7 +218,7 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
 
   ## RETURN THE FUNCTION
   if (length(res) == 1 && names(res) == f) return( res[[1]] )
-  else return( res )
+  else return( new( "CFuncList", res ) )
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -82,3 +82,4 @@ function (name = "anRpackage", list = new( "CFunc" ), environment = .GlobalEnv,
 	invisible(NULL)
 	
 } )
+
