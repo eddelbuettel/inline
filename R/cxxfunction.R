@@ -170,7 +170,7 @@ extern "C" {
   		body <- quote( .Call( "EXTERNALNAME", PACKAGE=f, ARG) )[ c(1:3, rep(4, length(sig[[i]]))) ]
   		for ( j in seq(along = sig[[i]]) ) body[[j+3]] <- as.name(names(sig[[i]])[j])
   	
-  		body[[2]] <- f
+  		body[[2]] <- names(sig)[[i]]
   		## update the body of 'fn'
   		body(fn)[[4]] <- body
   		## set fn as THE function in CFunc of res[[i]]
