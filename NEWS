@@ -1,4 +1,4 @@
-0.3.5	(under development)
+0.3.5	2010-06-02
 
 	o	new R function "cxxfunction" to generate an R function with inlined
 	C++ code using the .Call calling convention. The function was introduced
