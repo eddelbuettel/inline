@@ -2,7 +2,6 @@
 
 \alias{cfunction}
 \alias{setCMethod}
-\alias{inline}
 
 \concept{inline function call}
 
