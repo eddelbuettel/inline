@@ -1,0 +1,5 @@
+r-cran-inline (0.3.4-1) unstable; urgency=low
+
+  * Initial Debian package				(Closes: #580667)
+
+ -- Dirk Eddelbuettel <edd@debian.org>  Fri, 07 May 2010 10:16:33 -0500

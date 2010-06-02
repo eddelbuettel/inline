@@ -1,0 +1,45 @@
+This is the Debian GNU/Linux r-cran-inline package of inline which
+providesng support for 'inlining' functions written in Fortran, C or
+C++ into R, and which was written by Oleg Sklyar with contributions by
+Duncan Murdoch, Mike Smith and Dirk Eddelbuettel.
+
+This package was created by Dirk Eddelbuettel <edd@debian.org>.
+The sources were downloaded from the CRAN network at
+	http://cran.r-project.org
+
+The package was renamed from its upstream name 'inline' to
+'r-cran-inline' to fit the pattern of CRAN (and non-CRAN) packages for
+R.
+
+Copyright (C) 2005 - 2006 Oleg Sklyar
+Copyright (C) 2007 - 2009 Oleg Sklyar and Duncan Murdoch
+Copyright (C) 2008 - 2009 Oleg Sklyar, Duncan Murdoch, Mike Smith
+Copyright (C) 2009        Oleg Sklyar, Duncan Murdoch, Mike Smith, Dirk Eddelbuettel
+
+License: LGPL-2.1
+
+On a Debian GNU/Linux system, the GNU LESSER GENERAL PUBLIC LICENSE
+(LGPL), version 2.1, is included in the file /usr/share/common-licenses/LGPL-2.1.
+
+For reference, the upstream DESCRIPTION file is included below:
+
+   Package: inline
+   Version: 0.3.4
+   Date: 27 December 2009
+   Title: Inline C, C++, Fortran function calls from R
+   Author: Oleg Sklyar, Duncan Murdoch, Mike Smith, Dirk Eddelbuettel
+   Maintainer: Oleg Sklyar <oleg.sklyar@googlemail.com>
+   Depends: R (>= 2.4.0), methods
+   Suggests: Rcpp (>= 0.7.0)
+   Description: Functionality to dynamically define R functions and S4
+           methods with in-lined C, C++ or Fortran code supporting .C and
+           .Call calling conventions.
+   License: LGPL
+   URL: http://www.ebi.ac.uk/~osklyar/inline/
+   Copyright: Oleg Sklyar, 2005-2009
+   LazyLoad: yes
+   Packaged: 2009-12-27 21:54:24 UTC; osklyar
+   Repository: CRAN
+   Date/Publication: 2009-12-28 10:53:05
+
+
