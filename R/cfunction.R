@@ -251,9 +251,13 @@ compileCode <- function(f, code, language, verbose) {
   if ( file.exists(libLFile2) ) file.remove( libLFile2 )
 
   setwd(dirname(libCFile))
-  cmd <- paste(R.home(component="bin"), "/R CMD SHLIB ", basename(libCFile), sep="")
+  errfile <- paste( basename(libCFile), ".err.txt", sep = "" )
+  cmd <- paste(R.home(component="bin"), "/R CMD SHLIB ", basename(libCFile), " 2> ", errfile, sep="")
   if (verbose) cat("Compilation argument:\n", cmd, "\n")
   compiled <- system(cmd, intern=!verbose)
+  errmsg <- readLines( errfile )
+  unlink( errfile )
+  writeLines( errmsg )
   setwd(wd)
 
   if ( !file.exists(libLFile) && file.exists(libLFile2) ) libLFile <- libLFile2
@@ -262,7 +266,7 @@ compileCode <- function(f, code, language, verbose) {
     cat("\nProgram source:\n")
     code <- strsplit(code, "\n")
     for (i in 1:length(code[[1]])) cat(format(i,width=3), ": ", code[[1]][i], "\n", sep="")
-    stop( "Compilation ERROR, function(s)/method(s) not created!" )
+    stop( paste( "Compilation ERROR, function(s)/method(s) not created!", paste( errmsg , collapse = "\n" ) ) )
   }
   return( libLFile )
 }
