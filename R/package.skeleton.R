@@ -109,7 +109,10 @@ function (name = "anRpackage", list = new( "CFuncList" ), environment = .GlobalE
 setMethod( "package.skeleton", signature( name = "character", list = "CFunc" ), 
 function (name = "anRpackage", list = new( "CFunc" ), environment = .GlobalEnv, 
     path = ".", force = FALSE, namespace = FALSE, code_files = character()) {
-	package.skeleton( name = name, list = new( "CfuncList", list),
-		environment = environment, path = path , force = force, namespace = namespace , code_files = code_files )
+	
+    funclist <- new( "CFuncList", base::list( fun = list ) )    
+    package.skeleton( name = name, list = funclist,
+		environment = environment, path = path , force = force, 
+		namespace = namespace , code_files = code_files )
 } )
 
