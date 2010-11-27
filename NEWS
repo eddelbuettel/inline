@@ -1,3 +1,7 @@
+0.3.7   2010-11-27
+
+    o   faster cxxfunction using native routine registration
+
 0.3.7   2010-11-02
 
     o   fix package.skeleton for use with just a single function
