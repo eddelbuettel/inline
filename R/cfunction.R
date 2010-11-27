@@ -175,11 +175,11 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
     ## this is the skeleton of the function, the external call is added below using 'body'
     ## important here: all variables are kept in the local environment
     fn <- function(arg) {
-   	  if ( !file.exists(libLFile) )
-   	    libLFile <<- compileCode(f, code, language, verbose)
-   	  if ( !( f %in% names(getLoadedDLLs()) ) ) dyn.load(libLFile)
+   	  NULL
     }
-
+        
+    DLL <- dyn.load( libLFile )
+    
     ## Modify the function formals to give the right argument list
     args <- formals(fn)[ rep(1, length(sig[[i]])) ]
     names(args) <- names(sig[[i]])
@@ -187,20 +187,20 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
 
     ## create .C/.Call function call that will be added to 'fn'
     if (convention == ".Call") {
-      body <- quote( CONVENTION("EXTERNALNAME", PACKAGE=f, ARG) )[ c(1:3, rep(4, length(sig[[i]]))) ]
-      for ( j in seq(along = sig[[i]]) ) body[[j+3]] <- as.name(names(sig[[i]])[j])
+      body <- quote( CONVENTION("EXTERNALNAME", ARG) )[ c(1:2, rep(3, length(sig[[i]]))) ]
+      for ( j in seq(along = sig[[i]]) ) body[[j+2]] <- as.name(names(sig[[i]])[j])
     }
     else {
-      body <- quote( CONVENTION("EXTERNALNAME", PACKAGE=f, as.logical(ARG), as.integer(ARG),
+      body <- quote( CONVENTION("EXTERNALNAME", as.logical(ARG), as.integer(ARG),
                     as.double(ARG), as.complex(ARG), as.character(ARG),
-          			    as.character(ARG), as.double(ARG)) )[ c(1:3,types+3) ]
-      names(body) <- c( NA, "name", "PACKAGE", names(sig[[i]]) )
-      for ( j in seq(along = sig[[i]]) ) body[[j+3]][[2]] <- as.name(names(sig[[i]])[j])
+          			    as.character(ARG), as.double(ARG)) )[ c(1:2,types+2) ]
+      names(body) <- c( NA, "name", names(sig[[i]]) )
+      for ( j in seq(along = sig[[i]]) ) body[[j+2]][[2]] <- as.name(names(sig[[i]])[j])
     }
-    body[[1]] <- as.name(convention)
-    body[[2]] <- names(sig)[i]
+    body[[1]] <- get(convention)
+    body[[2]] <- getNativeSymbolInfo( names(sig)[i], DLL )$address
     ## update the body of 'fn'
-    body(fn)[[4]] <- body
+    body(fn) <- body
     ## set fn as THE function in CFunc of res[[i]]
     res[[i]]@.Data <- fn
   }
