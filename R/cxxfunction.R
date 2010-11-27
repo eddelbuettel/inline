@@ -186,7 +186,7 @@ extern "C" void R_init_%s( DllInfo* info ){
   		body <- quote( .Call( "EXTERNALNAME", ARG) )[ c(1:2, rep(3, length(sig[[i]]))) ]
   		for ( j in seq(along = sig[[i]]) ) body[[j+2]] <- as.name(names(sig[[i]])[j])
   	
-  		body[[2]] <- getNativeSymbolInfo( names(sig)[[i]], DLL, withRegistrationInfo = TRUE )
+  		body[[2]] <- getNativeSymbolInfo( names(sig)[[i]], DLL )$address
   		## update the body of 'fn'
   		body(fn) <- body
   		## set fn as THE function in CFunc of res[[i]]
