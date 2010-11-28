@@ -113,6 +113,7 @@ R_CallMethodDef callMethods[]  = {
 
 extern "C" void R_init_%s( DllInfo* info ){
     R_registerRoutines(info, NULL, callMethods, NULL, NULL);
+    R_useDynamicSymbols(info, (Rboolean)FALSE);
 }
      
 ', settings_includes , paste( includes, collapse = "\n" ), 
