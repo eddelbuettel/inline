@@ -214,7 +214,7 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   }
 
   ## Remove unnecessary objects from the local environment
-  remove(list = c("args", "body", "convention", "fn", "funCsig", "i", "includes", "j"))
+  remove(list = c("args", "body", "fn", "funCsig", "i", "includes", "j"))
 
   ## RETURN THE FUNCTION
   if (length(res) == 1 && names(res) == f) return( res[[1]] )

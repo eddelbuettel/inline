@@ -11,7 +11,9 @@ function (name = "anRpackage", list = new( "CFuncList" ), environment = .GlobalE
 	functions <- names( list )
 	for( i in seq_along(list) ){
 		f <- functions[i]
-		call <- body( list[[i]]@.Data )[[4]]
+		call <- body( list[[i]]@.Data )
+		call[[1L]] <- as.name( env$convention )
+		call[[2L]] <- names( env$sig )[i]
 		call[["PACKAGE"]] <- name
 		fun <- list[[i]]@.Data
 		body( fun ) <- call
@@ -75,12 +77,12 @@ function (name = "anRpackage", list = new( "CFuncList" ), environment = .GlobalE
 		
 		depends <- settings$Depends
 		if( !is.null( depends ) ){
-			DESCRIPTION <- cbind( DESCRIPTION, "Depends" = depends )
+			DESCRIPTION <- cbind( DESCRIPTION, "Depends" = paste( depends, collapse = ", ") )
 		}
 		
 		linkingTo <- settings$LinkingTo
 		if( !is.null( linkingTo ) ){
-			DESCRIPTION <- cbind( DESCRIPTION, "LinkingTo" = linkingTo )
+			DESCRIPTION <- cbind( DESCRIPTION, "LinkingTo" = paste( linkingTo, collapse = ", ") )
 		}
 		write.dcf( DESCRIPTION, DESCRIPTION_file )
 		

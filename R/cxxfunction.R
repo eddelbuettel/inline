@@ -47,7 +47,6 @@ cxxfunction <- function (
 	verbose = FALSE
 	){
 	    
-		
 	f <- basename( tempfile( ) )	
 	
 	if( ! is.list( sig ) ){
@@ -199,7 +198,7 @@ extern "C" void R_init_%s( DllInfo* info ){
   	
   	## clear the environment
   	rm( j )
-  	
+  	convention <- ".Call"
   	if( identical( length(sig), 1L ) ) res[[1L]] else res
 }
 
