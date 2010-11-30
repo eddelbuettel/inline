@@ -118,7 +118,7 @@ function (name = "anRpackage", list = new( "CFuncList" ), environment = .GlobalE
 		
 		Makevars.in <- settings$Makevars.in
 		if( ! is.null( Makevars.in ) ){
-		    Makevars_in_file <- file.path(name, "Makevars.in" )
+		    Makevars_in_file <- file.path(name, "src", "Makevars.in" )
 		    writeLines( Makevars.in, Makevars_in_file )
 		    message( ">> added Makevars.in" )
 		}
