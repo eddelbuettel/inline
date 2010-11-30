@@ -102,6 +102,20 @@ function (name = "anRpackage", list = new( "CFuncList" ), environment = .GlobalE
 			message( ">> added Makevars.win" )
 		}
 		
+		configure <- settings$configure
+		if( ! is.null( configure ) ){
+		    configure_file <- file.path(name, "configure" )
+		    writeLines( configure, configure_file )
+		    message( ">> added configure" )
+		}
+		
+		configure.win <- settings$configure.win
+		if( ! is.null( configure ) ){
+		    configure_win_file <- file.path(name, "configure.win" )
+		    writeLines( configure.win, configure_win_file )
+		    message( ">> added configure.win" )
+		}
+		
 	}
 	invisible(NULL)
 	
