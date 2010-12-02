@@ -82,10 +82,6 @@ SEXP %s( %s ){
 	
 	settings_includes <- if( is.null( settings$includes ) ) "" else paste( settings$includes, collapse = "\n" )
 
-	reg <- sapply( 1:length(sig), function(i){
-	    sprintf( "CALLDEF(%s,%d), ", names(sig)[i], length(sig[[i]]) )
-	} )
-	
 	code <- sprintf( '
 #include <R_ext/Rdynload.h>
 
@@ -103,23 +99,9 @@ extern "C" {
 // definition
 %s
 
-// registration
-#define CALLDEF(name, n)  {#name, (DL_FUNC) &name, n}
-R_CallMethodDef callMethods[]  = {
-    %s
-    {NULL, NULL, 0}
-};
-
-extern "C" void R_init_%s( DllInfo* info ){
-    R_registerRoutines(info, NULL, callMethods, NULL, NULL);
-    R_useDynamicSymbols(info, (Rboolean)FALSE);
-}
-     
 ', settings_includes , paste( includes, collapse = "\n" ), 
 	paste( decl, collapse = "\n" ), 
-	paste( def, collapse = "\n"), 
-	paste( reg, collapse = "\n" ), 
-	f
+	paste( def, collapse = "\n")
 	)
 
 	
