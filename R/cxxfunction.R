@@ -83,8 +83,6 @@ SEXP %s( %s ){
 	settings_includes <- if( is.null( settings$includes ) ) "" else paste( settings$includes, collapse = "\n" )
 
 	code <- sprintf( '
-#include <R_ext/Rdynload.h>
-
 // includes from the plugin
 %s
 
