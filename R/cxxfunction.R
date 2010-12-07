@@ -165,7 +165,7 @@ extern "C" {
     	formals(fn) <- args
   		  
     	## create .Call function call that will be added to 'fn'
-  		body <- quote( .Call( "EXTERNALNAME", ARG) )[ c(1:2, rep(3, length(sig[[i]]))) ]
+  		body <- quote( .Call( EXTERNALNAME, ARG) )[ c(1:2, rep(3, length(sig[[i]]))) ]
   		for ( j in seq(along = sig[[i]]) ) body[[j+2]] <- as.name(names(sig[[i]])[j])
   		
   		body[[1L]] <- .Call

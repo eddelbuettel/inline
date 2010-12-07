@@ -1,6 +1,7 @@
-0.3.8   2010-11-27
+0.3.8   2010-12-07
 
-    o   faster cfunction and cxxfunction using native routine registration
+    o   faster cfunction and cxxfunction by loading and resolving the routine
+        at "compile" time
 
 0.3.7   2010-11-02
 
