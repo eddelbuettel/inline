@@ -156,13 +156,7 @@ extern "C" {
 	                private :
 	                    Rcpp::RObject object ;
 	            } ;
-	            
-	            template <typename T>
-	            inline Magic magic( const T& object){ 
-	                return Magic(object) ;
-	            }
-	            
-	        }
+	       }
 	'    
     } else "", 
     paste( includes, collapse = "\n" ), 
