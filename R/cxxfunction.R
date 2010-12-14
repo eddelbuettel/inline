@@ -105,10 +105,10 @@ inline_::Magic %s____( %s ){
 ',
                 names(signature)[index], 
                 signature[[index]], 
-                body_wrapper ,
+                if(is.null(settings$body)) body_wrapper else settings$body(body_wrapper) ,
                 names(signature)[index], 
                 s,
-                if(is.null(settings$body)) body[[index]] else settings$body(body[[index]]) 
+                body[[index]]
             )
 		     
 		} else {
