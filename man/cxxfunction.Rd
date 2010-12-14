@@ -43,7 +43,6 @@ if( require( Rcpp ) ){
 		return wrap( as<int>(x) * as<double>(y) ) ;
 	', plugin = "Rcpp" )
 	fx( 2L, 5 )
-
 }
 
 # RcppArmadillo plugin

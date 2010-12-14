@@ -1,6 +1,6 @@
 Package: inline
-Version: 0.3.8
-Date: 2010-12-07
+Version: 0.3.8.1
+Date: 2010-12-14
 Title: Inline C, C++, Fortran function calls from R
 Author: Oleg Sklyar, Duncan Murdoch, Mike Smith, Dirk Eddelbuettel, Romain Francois
 Maintainer: Oleg Sklyar <oleg.sklyar@googlemail.com>
@@ -11,4 +11,4 @@ License: LGPL
 URL: http://www.ebi.ac.uk/~osklyar/inline/
 Copyright: Oleg Sklyar, 2005-2010
 LazyLoad: yes
-Packaged: 2009-12-27 20:12:53 UTC; osklyar
+

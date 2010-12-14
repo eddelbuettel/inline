@@ -59,7 +59,8 @@ cxxfunction <- function (
 	    stop("mismatch between the number of functions declared in 'sig' and the number of function bodies provided in 'body'")
 	    
 	signature <- lapply( sig, function(x) {
-		if( ! length(x) ){ 
+		if( is(x, "C++Signature" ) ) x <- x@signature 
+	    if( ! length(x) ){ 
 			"" 
 		} else {
 			paste( sprintf( "SEXP %s", names(x) ), collapse = ", " )
@@ -67,23 +68,68 @@ cxxfunction <- function (
 	} )
 	
 	decl <- lapply( 1:length(sig) , function(index) {
-		sprintf( 'SEXP %s( %s) ;', names(signature)[index] , signature[[index]] ) 
+		s <- sig[[index]]
+		name <- names(signature)[index]
+		if( is( s, "C++Signature" ) ){
+		    s <- s@signature
+		    s <- if( ! length(s) ) "" else paste( sprintf( "%s %s", s, names(s) ), collapse = ", " )
+		    sprintf( 'SEXP %s( %s) ;\ninline_::Magic %s____( %s ) ; ', 
+		        name, signature[[index]], 
+		        name, s ) 
+		} else{
+		    sprintf( 'SEXP %s( %s) ;', names(signature)[index] , signature[[index]] )
+		}
 	} )
 
 	def <- lapply( 1:length(sig), function(index){
-		sprintf( '
+		s <- sig[[index]]
+		if( is( s, "C++Signature" ) ){
+		    s <- s@signature
+		    body_wrapper <- 
+		        paste( 
+		            "    return ", names(signature)[index], "____(", 
+		            if( length(signature[[index]]) ) {
+		                paste( sprintf( "::Rcpp::internal::converter(%s)", names(s) ), collapse = ", ")
+		            } else "" , 
+		            ") ;", sep = ""
+		    )
+		    s <- if( ! length(s) ) "" else paste( sprintf( "%s %s", s, names(s) ), collapse = ", " )
+		    
+		    sprintf( '
 SEXP %s( %s ){
 %s
 }
-', names(signature)[index], 
-	signature[[index]], 
-	if(is.null(settings$body)) body[[index]] else settings$body(body[[index]]) )
+inline_::Magic %s____( %s ){
+%s
+}
+',
+                names(signature)[index], 
+                signature[[index]], 
+                body_wrapper ,
+                names(signature)[index], 
+                s,
+                if(is.null(settings$body)) body[[index]] else settings$body(body[[index]]) 
+            )
+		     
+		} else {
+		    sprintf( '
+SEXP %s( %s ){
+%s
+}
+',
+                names(signature)[index], 
+                signature[[index]], 
+                if(is.null(settings$body)) body[[index]] else settings$body(body[[index]]) 
+            )
+	    }
+	    
 	} )
 	
 	settings_includes <- if( is.null( settings$includes ) ) "" else paste( settings$includes, collapse = "\n" )
 
 	code <- sprintf( '
 // includes from the plugin
+%s
 %s
 
 // user includes
@@ -97,12 +143,33 @@ extern "C" {
 // definition
 %s
 
-', settings_includes , paste( includes, collapse = "\n" ), 
-	paste( decl, collapse = "\n" ), 
-	paste( def, collapse = "\n")
+',  settings_includes , 
+    if( any( sapply( sig, function(x) is(x, "C++Signature" ) ) ) ){
+    '
+	        namespace inline_ {
+	            class Magic {
+	                public:
+	                    template <typename T>
+	                    Magic( const T& object_ ) : object( ::Rcpp::wrap( object_) ){}
+	                    
+	                    operator SEXP(){ return object ; }
+	                private :
+	                    Rcpp::RObject object ;
+	            } ;
+	            
+	            template <typename T>
+	            inline Magic magic( const T& object){ 
+	                return Magic(object) ;
+	            }
+	            
+	        }
+	'    
+    } else "", 
+    paste( includes, collapse = "\n" ), 
+    paste( decl, collapse = "\n" ), 
+    paste( def, collapse = "\n")
 	)
 
-	
 	if( !is.null( env <- settings$env ) ){
 		do.call( Sys.setenv, env )
 		if( isTRUE(verbose) ){
@@ -153,20 +220,23 @@ extern "C" {
   	DLL <- dyn.load( libLFile )
   	
   	for( i in seq_along(sig) ){
-  		res[[i]] <- new( "CFunc", code = code )
+  	    res[[i]] <- new( "CFunc", code = code )
   		
   		fn <- function(arg) {
   		  NULL
   		}
   		
+  		s <- sig[[i]]
+  		if( is(s, "C++Signature") ) s <- s@signature
+  		
     	## Modify the function formals to give the right argument list
-    	args <- formals(fn)[ rep(1, length(sig[[i]])) ]
-    	names(args) <- names(sig[[i]])
+    	args <- formals(fn)[ rep(1, length(s)) ]
+    	names(args) <- names(s)
     	formals(fn) <- args
   		  
     	## create .Call function call that will be added to 'fn'
-  		body <- quote( .Call( EXTERNALNAME, ARG) )[ c(1:2, rep(3, length(sig[[i]]))) ]
-  		for ( j in seq(along = sig[[i]]) ) body[[j+2]] <- as.name(names(sig[[i]])[j])
+  		body <- quote( .Call( EXTERNALNAME, ARG) )[ c(1:2, rep(3, length(s))) ]
+  		for ( j in seq(along = s) ) body[[j+2]] <- as.name(names(s)[j])
   		
   		body[[1L]] <- .Call
   		body[[2L]] <- getNativeSymbolInfo( names(sig)[[i]], DLL )$address
