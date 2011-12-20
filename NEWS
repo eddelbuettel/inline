@@ -3,6 +3,8 @@
     o   new R function "cxxsignature" that can be used to specify C++ signature
         in calls to cxxfunction
 
+    o   getDynLib() error message corrected as suggested by Yasir Suhail
+
 0.3.8   2010-12-07
 
     o   faster cfunction and cxxfunction by loading and resolving the routine
