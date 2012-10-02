@@ -1,16 +1,16 @@
 setGeneric("getDynLib", function(x, ...) standardGeneric("getDynLib") )
 
-setMethod( "getDynLib", signature( x = "character" ), 
+setMethod( "getDynLib", signature( x = "character" ),
 function( x ){
 	dlls <- getLoadedDLLs()
 	if( x %in% names( dlls ) ){
 		dlls[[ x ]]
 	} else {
-		stop( sprintf( "dll %s not loaded" ) )	
+		stop( sprintf( "dll %s not loaded", x ) )
 	}
 } )
 
-setMethod( "getDynLib", signature( x = "CFunc" ), 
+setMethod( "getDynLib", signature( x = "CFunc" ),
 function( x ){
 	env <- environment( x@.Data )
 	f <- get( "f", env )
