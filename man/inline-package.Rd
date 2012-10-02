@@ -14,7 +14,7 @@ calling conventions.
 \tabular{ll}{
 Package: \tab inline\cr
 Type: \tab Package\cr
-Version: \tab 0.3.9\cr
+Version: \tab 0.3.8\cr
 Date: \tab 2010-12-07\cr
 License: \tab LGPL\cr
 LazyLoad: \tab yes\cr
