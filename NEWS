@@ -1,3 +1,9 @@
+0.3.9   2012-10-02
+
+    o   Uncoordinating hijacking of package by CRAN maintainer with a word
+        change in cfunction.R to prevent an error under an unreleased version
+        of R
+
 0.3.8   2010-12-07
 
     o   faster cfunction and cxxfunction by loading and resolving the routine

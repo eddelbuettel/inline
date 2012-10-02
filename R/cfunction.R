@@ -177,9 +177,9 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
     fn <- function(arg) {
    	  NULL
     }
-        
+
     DLL <- dyn.load( libLFile )
-    
+
     ## Modify the function formals to give the right argument list
     args <- formals(fn)[ rep(1, length(sig[[i]])) ]
     names(args) <- names(sig[[i]])
@@ -194,7 +194,7 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
       body <- quote( CONVENTION("EXTERNALNAME", as.logical(ARG), as.integer(ARG),
                     as.double(ARG), as.complex(ARG), as.character(ARG),
           			    as.character(ARG), as.double(ARG)) )[ c(1:2,types+2) ]
-      names(body) <- c( NA, "name", names(sig[[i]]) )
+      names(body) <- c( NA, "", names(sig[[i]]) )
       for ( j in seq(along = sig[[i]]) ) body[[j+2]][[2]] <- as.name(names(sig[[i]])[j])
     }
     body[[1]] <- get(convention)
