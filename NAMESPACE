@@ -2,7 +2,7 @@ import("methods")
 importFrom( "utils", "package.skeleton" )
 
 export(
-  "cfunction", "cxxfunction", "getPlugin", "registerPlugin"
+  "cfunction", "cxxfunction", "getPlugin", "registerPlugin", "rcpp"
 )
 
 exportMethods(

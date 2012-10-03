@@ -1,16 +1,21 @@
 \name{cxxfunction}
 \alias{cxxfunction}
+\alias{rcpp}
 \title{
 inline C++ function
 }
 \description{
 Functionality to dynamically define an R function with inlined C++ code
-using the \code{\link{.Call}} calling convention
+using the \code{\link{.Call}} calling convention.
+
+The \code{rcpp()} wrapper sets the plugin to the \dQuote{Rcpp} value
+suitable for using \pkg{Rcpp}.
 }
 \usage{
 cxxfunction(sig = character(), body = character(), 
 	plugin = "default", includes = "", 
 	settings = getPlugin(plugin), ..., verbose = FALSE)
+rcpp(...)
 }
 \arguments{
   \item{sig}{Signature of the function. A named character vector}
@@ -43,6 +48,10 @@ if( require( Rcpp ) ){
 		return wrap( as<int>(x) * as<double>(y) ) ;
 	', plugin = "Rcpp" )
 	fx( 2L, 5 )
+
+        ## equivalent shorter form using rcpp()
+	fx <- rcpp(signature(x = "integer", y = "numeric"),
+                   ' return wrap( as<int>(x) * as<double>(y) ) ; ')
 
 }
 

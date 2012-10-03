@@ -2,13 +2,13 @@ Source: r-cran-inline
 Section: gnu-r
 Priority: optional
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
-Build-Depends: debhelper (>= 7.0.0), r-base-dev (>= 2.12.0), cdbs
-Standards-Version: 3.9.1
+Build-Depends: debhelper (>= 7.0.0), r-base-dev (>= 2.15.1), cdbs
+Standards-Version: 3.9.4
 Homepage: http://cran.r-project.org/web/packages/inline/index.html
 
 Package: r-cran-inline
 Architecture: all
-Depends: ${shlibs:Depends}, r-base-core (>= 2.12.0)
+Depends: ${shlibs:Depends}, ${R:Depends}
 Description: GNU R package to inline C, C++, Fortran functions from R
  This package provides functionality to dynamically define R functions and S4
  methods with in-lined C, C++ or Fortran code supporting .C and .Call calling 
