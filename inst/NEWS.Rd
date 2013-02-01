@@ -2,6 +2,12 @@
 \title{News for Package 'inline'}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in inline version 0.3.11 (future)}{
+  \itemize{
+      \item{Fix bug in cfunction for .C convention with raw vectors.}
+  }
+}
+
 \section{Changes in inline version 0.3.10 (2012-10-03)}{
   \itemize{
     \item \code{getDynLib()} error message corrected as suggested by

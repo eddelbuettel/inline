@@ -193,7 +193,7 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
     else {
       body <- quote( CONVENTION("EXTERNALNAME", as.logical(ARG), as.integer(ARG),
                     as.double(ARG), as.complex(ARG), as.character(ARG),
-          			    as.character(ARG), as.double(ARG)) )[ c(1:2,types+2) ]
+          			    as.raw(ARG), as.double(ARG)) )[ c(1:2,types+2) ]
       names(body) <- c( NA, "", names(sig[[i]]) )
       for ( j in seq(along = sig[[i]]) ) body[[j+2]][[2]] <- as.name(names(sig[[i]])[j])
     }
