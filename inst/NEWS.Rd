@@ -4,7 +4,8 @@
 
 \section{Changes in inline version 0.3.11 (future)}{
   \itemize{
-      \item{Fix bug in cfunction for .C convention with raw vectors.}
+    \item{Fix bug in \code{cfunction} for \code{.C} convention with raw vectors.}
+    \item{Allow \code{rcpp} wrapper to pass another plugin (as eg RcppArmadillo)}
   }
 }
 

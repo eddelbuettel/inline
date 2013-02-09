@@ -15,7 +15,7 @@ suitable for using \pkg{Rcpp}.
 cxxfunction(sig = character(), body = character(), 
 	plugin = "default", includes = "", 
 	settings = getPlugin(plugin), ..., verbose = FALSE)
-rcpp(...)
+rcpp(..., plugin="Rcpp")
 }
 \arguments{
   \item{sig}{Signature of the function. A named character vector}

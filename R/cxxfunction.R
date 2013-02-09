@@ -182,4 +182,4 @@ extern "C" {
   	if( identical( length(sig), 1L ) ) res[[1L]] else res
 }
 
-rcpp <- function(...) cxxfunction(..., plugin="Rcpp")
+rcpp <- function(..., plugin="Rcpp") cxxfunction(..., plugin=plugin)
