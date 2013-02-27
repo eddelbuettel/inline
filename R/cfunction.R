@@ -235,9 +235,9 @@ compileCode <- function(f, code, language, verbose) {
   }
   else {
     ## UNIX-alike build
-    libCFile  <- paste(tempdir(), "/", f, ".EXT", sep="")
-    libLFile  <- paste(tempdir(), "/", f, ".so", sep="")
-    libLFile2 <- paste(tempdir(), "/", f, ".sl", sep="")
+    libCFile  <- paste(tempdir(), "/", f, ".EXT",               sep="")
+    libLFile  <- paste(tempdir(), "/", f, .Platform$dynlib.ext, sep="")
+    libLFile2 <- paste(tempdir(), "/", f, ".sl",                sep="")
   }
   extension <- switch(language, "C++"=".cpp", C=".c", Fortran=".f", F95=".f95",
                                 ObjectiveC=".m", "ObjectiveC++"=".mm")
