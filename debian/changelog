@@ -1,3 +1,9 @@
+r-cran-inline (0.3.11-1) unstable; urgency=low
+
+  * New upstream version
+
+ -- Dirk Eddelbuettel <edd@debian.org>  Tue, 26 Feb 2013 21:00:03 -0600
+
 r-cran-inline (0.3.10-1) unstable; urgency=low
 
   * New upstream version
