@@ -113,7 +113,7 @@ extern "C" {
 
 	LinkingTo <- settings$LinkingTo
 	if( !is.null( LinkingTo ) ){
-		paths <- .find.package(LinkingTo, quiet=TRUE)
+		paths <- find.package(LinkingTo, quiet=TRUE)
 		if( length( paths ) ){
 			flag <- paste(
 				paste0( '-I"', paths, '/include"' ),
