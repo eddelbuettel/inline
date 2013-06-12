@@ -3,7 +3,7 @@ setGeneric( "package.skeleton" )
 
 setMethod( "package.skeleton", signature( name = "character", list = "CFuncList" ),
 function (name = "anRpackage", list = new( "CFuncList" ), environment = .GlobalEnv,
-    path = ".", force = FALSE, namespace = FALSE, code_files = character()) {
+    path = ".", force = FALSE, code_files = character()) {
 
 	env <- environment( list[[1]]@.Data )
 	clean.env <- new.env( parent = environment )
@@ -22,7 +22,7 @@ function (name = "anRpackage", list = new( "CFuncList" ), environment = .GlobalE
 	}
 
 	message( ">> standard package.skeleton from utils" )
-	package.skeleton( name, functions , clean.env, path, force, namespace = TRUE, code_files )
+	package.skeleton( name, functions , clean.env, path, force, code_files )
 
 	if( !file.exists( R <- file.path(name, "R") ) ){
 		dir.create( R )
@@ -132,11 +132,11 @@ function (name = "anRpackage", list = new( "CFuncList" ), environment = .GlobalE
 
 setMethod( "package.skeleton", signature( name = "character", list = "CFunc" ),
 function (name = "anRpackage", list = new( "CFunc" ), environment = .GlobalEnv,
-    path = ".", force = FALSE, namespace = FALSE, code_files = character()) {
+    path = ".", force = FALSE, code_files = character() ) {
 
     funclist <- new( "CFuncList", base::list( fun = list ) )
     package.skeleton( name = name, list = funclist,
 		environment = environment, path = path , force = force,
-		namespace = namespace , code_files = code_files )
+		code_files = code_files )
 } )
 

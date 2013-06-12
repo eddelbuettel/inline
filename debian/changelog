@@ -1,3 +1,19 @@
+r-cran-inline (0.3.12-1) unstable; urgency=low
+
+  * New upstream version
+
+  * debian/control: Set Build-Depends: to current R version
+
+ -- Dirk Eddelbuettel <edd@debian.org>  Wed, 12 Jun 2013 06:48:15 -0500
+
+r-cran-inline (0.3.11-2) unstable; urgency=low
+
+  * debian/control: Set Build-Depends: to current R version 
+  
+  * (Re-)building with R 3.0.0
+
+ -- Dirk Eddelbuettel <edd@debian.org>  Fri, 05 Apr 2013 07:32:36 -0500
+
 r-cran-inline (0.3.11-1) unstable; urgency=low
 
   * New upstream version

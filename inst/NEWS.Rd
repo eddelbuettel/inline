@@ -2,12 +2,22 @@
 \title{News for Package 'inline'}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in inline version 0.3.12 (2013-06-12)}{
+  \itemize{
+    \item Align \code{package.skeleton} with the R-devel version of the
+    function which no longer has a \code{NAMESPACE} argument. 
+    \item Remove copy of LGPL in source archive as \code{R CMD check}
+    now complains about it. License status continues to be specified in
+    file \code{DESCRIPTION}.
+  }
+}
+
 \section{Changes in inline version 0.3.11 (2013-02-26)}{
   \itemize{
-    \item{Fix bug in \code{cfunction} for \code{.C} convention with raw vectors.}
-    \item{Correct \code{cfunction} to use \code{.Platform$dynlib.ext} as
-      the file extension for the library file (unless on Windows).}
-    \item{Allow \code{rcpp} wrapper to pass another plugin (as eg RcppArmadillo)}
+    \item Fix bug in \code{cfunction} for \code{.C} convention with raw vectors.
+    \item Correct \code{cfunction} to use \code{.Platform$dynlib.ext} as
+      the file extension for the library file (unless on Windows).
+    \item Allow \code{rcpp} wrapper to pass another plugin (as eg RcppArmadillo)
   }
 }
 
