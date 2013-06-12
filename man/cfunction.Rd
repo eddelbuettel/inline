@@ -28,7 +28,8 @@
   setCMethod(f, sig, body, ...)
 
   ## Further arguments:
-  #  setCMethod(f, sig, body, includes="", otherdefs="", cpp=TRUE, verbose=FALSE, where=topenv(.GlobalEnv), ...)
+  #  setCMethod(f, sig, body, includes="", otherdefs="", cpp=TRUE,
+  #  verbose=FALSE, where=topenv(.GlobalEnv), ...)
 }
 
 \arguments{
