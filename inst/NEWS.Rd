@@ -2,6 +2,14 @@
 \title{News for Package 'inline'}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in inline version 0.3.13 (2013-08-08)}{
+  \itemize{
+    \item Applied contributed patch by Mikhail Umorin which corrects
+    \code{cfunction()} in the case of a \code{list} of signature and
+    body arguments.
+  }
+}
+
 \section{Changes in inline version 0.3.12 (2013-06-12)}{
   \itemize{
     \item Align \code{package.skeleton} with the R-devel version of the

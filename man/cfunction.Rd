@@ -229,10 +229,7 @@ if (interactive()) { x11(); image(res[,,1]) }
 }
 
 \author{
-  Oleg Sklyar <\email{osklyar@ebi.ac.uk}>,
-  Duncan Murdoch, 
-  Mike Smith,
-  Dirk Eddelbuettel
+  Oleg Sklyar, Duncan Murdoch, Mike Smith, Dirk Eddelbuettel
 }
 
 \keyword{file}

@@ -55,7 +55,7 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
       if (verbose) cat("Setting PKG_LIBS to", args, "\n")
       Sys.setenv(PKG_LIBS=args)
   }
-
+  types <- vector(mode="list", length=length(sig))
   ## GENERATE THE CODE
   for ( i in seq_along(sig) ) {
     ## C/C++ with .Call convention *********************************************
@@ -102,11 +102,11 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
       }
   	  ## determine function header
   	  if ( length(sig[[i]]) > 0 ) {
-  	    types <- pmatch(sig[[i]], c("logical", "integer", "double", "complex",
+  	    types[[i]] <- pmatch(sig[[i]], c("logical", "integer", "double", "complex",
   	                       "character", "raw", "numeric"), duplicates.ok = TRUE)
-  	    if ( any(is.na(types)) ) stop( paste("Unrecognized type", sig[[i]][is.na(types)]) )
+  	    if ( any(is.na(types[[i]])) ) stop( paste("Unrecognized type", sig[[i]][is.na(types[[i]])]) )
   	    decls <- c("int *", "int *", "double *", "Rcomplex *", "char **",
-  	               "unsigned char *", "double *")[types]
+  	               "unsigned char *", "double *")[ types[[i]] ]
   	    funCsig <- paste(decls, names(sig[[i]]), collapse=", ")
 	    }
 	    else funCsig <- ""
@@ -130,12 +130,12 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
       }
   	  ## determine function header
   	  if ( length(sig[[i]]) > 0 ) {
-  	    types <- pmatch(sig[[i]], c("logical", "integer", "double", "complex",
+  	    types[[i]] <- pmatch(sig[[i]], c("logical", "integer", "double", "complex",
   	                       "character", "raw", "numeric"), duplicates.ok = TRUE)
-  	    if ( any(is.na(types)) ) stop( paste("Unrecognized type", sig[[i]][is.na(types)]) )
-  	    if (6 %in% types) stop( "raw type unsupported by .Fortran()" )
+  	    if ( any(is.na(types[[i]])) ) stop( paste("Unrecognized type", sig[[i]][is.na(types[[i]])]) )
+  	    if (6 %in% types[[i]]) stop( "raw type unsupported by .Fortran()" )
   	    decls <- c("INTEGER", "INTEGER", "DOUBLE PRECISION", "DOUBLE COMPLEX",
-  	               "CHARACTER*255", "Unsupported", "DOUBLE PRECISION")[types]
+  	               "CHARACTER*255", "Unsupported", "DOUBLE PRECISION")[ types[[i]] ]
   	    decls <- paste("      ", decls, " ", names(sig[[i]]), "(*)", sep="", collapse="\n")
   	    funCsig <- paste(names(sig[[i]]), collapse=", ")
   	  }
@@ -193,9 +193,15 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
     else {
       body <- quote( CONVENTION("EXTERNALNAME", as.logical(ARG), as.integer(ARG),
                     as.double(ARG), as.complex(ARG), as.character(ARG),
-          			    as.raw(ARG), as.double(ARG)) )[ c(1:2,types+2) ]
+          			    as.raw(ARG), as.double(ARG)) )[ c(1:2,types[[i]]+2) ]
       names(body) <- c( NA, "", names(sig[[i]]) )
       for ( j in seq(along = sig[[i]]) ) body[[j+2]][[2]] <- as.name(names(sig[[i]])[j])
+## OLD VERSION -- does not work for lists of functions
+#      body <- quote( CONVENTION("EXTERNALNAME", as.logical(ARG), as.integer(ARG),
+#                    as.double(ARG), as.complex(ARG), as.character(ARG),
+#          			    as.raw(ARG), as.double(ARG)) )[ c(1:2,types+2) ]
+#      names(body) <- c( NA, "", names(sig[[i]]) )
+#      for ( j in seq(along = sig[[i]]) ) body[[j+2]][[2]] <- as.name(names(sig[[i]])[j])
     }
     body[[1]] <- get(convention)
     body[[2]] <- getNativeSymbolInfo( names(sig)[i], DLL )$address
