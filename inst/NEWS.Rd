@@ -2,6 +2,14 @@
 \title{News for Package 'inline'}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in inline version 0.3.14 (2014-xx-yy)}{
+  \itemize{
+    \item Removed call to \code{Rcpp::RcppLdFlags()} which is no longer needed
+    \item With move of repository to GitHub, added a \code{.travis.yml}
+    file and corresponding entry in \code{.Rbuildignore}
+  }
+}
+
 \section{Changes in inline version 0.3.13 (2013-08-08)}{
   \itemize{
     \item Applied contributed patch by Mikhail Umorin which corrects

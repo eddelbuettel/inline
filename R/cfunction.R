@@ -38,7 +38,6 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   if (Rcpp) {
       if (!require(Rcpp)) stop("Rcpp cannot be loaded, install it or use the default Rcpp=FALSE")
       cxxargs <- c(Rcpp:::RcppCxxFlags(), cxxargs)	# prepend information from Rcpp
-      libargs <- c(Rcpp:::RcppLdFlags(), libargs)	# prepend information from Rcpp
   }
   if (length(cppargs) != 0) {
       args <- paste(cppargs, collapse=" ")
