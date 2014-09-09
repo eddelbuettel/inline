@@ -15,7 +15,11 @@ setClass( "CFuncList", contains = "list" )
 cfunction <- function(sig=character(), body=character(), includes=character(), otherdefs=character(),
                       language=c("C++", "C", "Fortran", "F95", "ObjectiveC", "ObjectiveC++"),
                       verbose=FALSE, convention=c(".Call", ".C", ".Fortran"), Rcpp=FALSE,
-                      cppargs=character(), cxxargs=character(), libargs=character()) {
+                      cppargs=character(), cxxargs=character(), libargs=character(),
+                      dim = NULL, implicit = NULL, module = NULL) {
+
+ if (missing (convention) & !missing(language))
+      convention <- switch (EXPR = language, "Fortran" = ".Fortran", "F95" = ".Fortran", ".C" = ".C", ObjectiveC = ".Call", "ObjectiveC++" = ".Call", "C++" = ".Call")
 
   convention <- match.arg(convention)
 
@@ -34,6 +38,15 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   }
   if( length(sig) != length(body) )
     stop("mismatch between the number of functions declared in 'sig' and the number of function bodies provided in 'body'")
+
+  if (is.null(dim)) 
+    dim <- as.list(rep("(*)", length(sig)))
+  else {            # this assumes fortran style
+      if (!is.list(dim)) 
+        dim <- list(dim)
+      if (length(dim) != length(sig)) 
+        stop("mismatch between the number of functions declared in 'sig' and the number of dimensions declared in 'dim'")
+  }
 
   if (Rcpp) {
       if (!require(Rcpp)) stop("Rcpp cannot be loaded, install it or use the default Rcpp=FALSE")
@@ -120,7 +133,9 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   	  code <- paste( code, "\n}\n", sep="")
     }
     ## .Fortran convention *****************************************************
-    else {
+    else {                                              
+     # old-style fortran requires 6 columns not used
+     lead <- ifelse (language == "Fortran", "      ","") 
   	  if (i == 1) {
 	      ## no default includes, include further includes
 	      code <- paste(includes, collapse="\n")
@@ -135,20 +150,37 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   	    if (6 %in% types[[i]]) stop( "raw type unsupported by .Fortran()" )
   	    decls <- c("INTEGER", "INTEGER", "DOUBLE PRECISION", "DOUBLE COMPLEX",
   	               "CHARACTER*255", "Unsupported", "DOUBLE PRECISION")[ types[[i]] ]
-  	    decls <- paste("      ", decls, " ", names(sig[[i]]), "(*)", sep="", collapse="\n")
+  	    decls <- paste(lead, decls, " ", names(sig[[i]]), dim[[i]], sep="", collapse="\n")
   	    funCsig <- paste(names(sig[[i]]), collapse=", ")
   	  }
   	  else {
 	      decls <- ""
 	      funCsig <- ""
 	    }
-  	  funCsig <- paste("      SUBROUTINE", names(sig)[i], "(", funCsig, ")\n", sep=" ")
+       	    
+  	  funCsig <- paste(lead,"SUBROUTINE", names(sig)[i], "(", funCsig, ")\n", sep=" ")
+      ## old-style FORTRAN line length restricted to 72 characters
+      if (language == "Fortran") {
+        if ((cl <- nchar(funCsig)) >= 72) {
+          fstring <- substr(funCsig, 72, cl)
+          funCsig <- substr(funCsig, 1, 71)
+          while ((cf <- nchar(fstring)) > 66) {
+            funCsig <- paste(funCsig, "\n     &", substr(fstring, 1, 66), sep = "")
+            fstring <- substr(fstring, 67, cf)
+          } 
+          if (cf > 0) funCsig <- paste(funCsig, "\n     &", fstring, sep = "")
+            funCsig <- paste(funCsig, "\n")   
+        } 
+      } 
+      ## IMPLICIT statement and module use
+      if (is.character(module)) funCsig <- paste(funCsig, lead, "USE ", module, "\n", sep = "")
+      if (is.character(implicit)) funCsig <- paste(funCsig, lead, "IMPLICIT ", implicit, "\n", sep = "")          
   	  ## OPEN function
-  	  code <- paste( code, funCsig, decls, collapse="\n")
+  	  code <- paste( code, funCsig, decls, "\n", collapse="\n", sep="")
   	  ## add code, split lines
   	  code <- paste( code, paste(body[[i]], collapse="\n"), sep="")
   	  ## CLOSE function
-  	  code <- paste( code, "\n      RETURN\n      END\n", sep="")
+  	  code <- paste( code, "\n", lead, "RETURN\n", lead, "END\n\n", sep="")
     }
   } ## for along signatures
 

@@ -6,6 +6,6 @@ export(
 )
 
 exportMethods(
-  "setCMethod", "getDynLib", "package.skeleton"
+  "setCMethod", "getDynLib", "package.skeleton", "print", "code"
 )
 
