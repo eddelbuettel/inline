@@ -19,7 +19,7 @@ before_install:
   - sudo apt-get update -q
 
 install:
-  - ./travis-tool.sh install_aptget Rcpp 
+  - ./travis-tool.sh install_aptget r-cran-rcpp 
 
 script:
   - ./travis-tool.sh run_tests
