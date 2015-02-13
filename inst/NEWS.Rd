@@ -7,6 +7,7 @@
     \item Removed call to \code{Rcpp::RcppLdFlags()} which is no longer needed
     \item With move of repository to GitHub, added a \code{.travis.yml}
     file and corresponding entry in \code{.Rbuildignore}
+    \item Replaces calls to \code{require()} with calls to \code{requireNamespace}
   }
 }
 
