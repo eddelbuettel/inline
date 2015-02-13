@@ -1,5 +1,5 @@
 This is the Debian GNU/Linux r-cran-inline package of inline which
-providesng support for 'inlining' functions written in Fortran, C or
+provides support for 'inlining' functions written in Fortran, C or
 C++ into R, and which was written by Oleg Sklyar with contributions by
 Duncan Murdoch, Mike Smith and Dirk Eddelbuettel.
 
