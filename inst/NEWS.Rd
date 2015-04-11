@@ -2,12 +2,16 @@
 \title{News for Package 'inline'}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
-\section{Changes in inline version 0.3.14 (2014-xx-yy)}{
+\section{Changes in inline version 0.3.14 (2015-04-11)}{
   \itemize{
     \item Removed call to \code{Rcpp::RcppLdFlags()} which is no longer needed
     \item With move of repository to GitHub, added a \code{.travis.yml}
     file and corresponding entry in \code{.Rbuildignore}
-    \item Replaces calls to \code{require()} with calls to \code{requireNamespace}
+    \item Replaces calls to \code{require()} with calls to \code{requireNamespace()}
+    \item Much improved support for Fortran and Fortran95 thanks to
+      Karline Soetaert who became a package co-author
+    \item New helper functions \code{writeDynLib} and \code{readDynLib}
+      as well as new methods \code{print} and \code{code} (also by Karline)
   }
 }
 
