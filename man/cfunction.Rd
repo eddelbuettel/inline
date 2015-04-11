@@ -19,7 +19,8 @@
             verbose=FALSE, 
             convention=c(".Call", ".C", ".Fortran"),
             Rcpp=FALSE,
-            cppargs=character(), cxxargs=character(), libargs=character())
+            cppargs=character(), cxxargs=character(), libargs=character(),
+            dim=NULL, implicit=NULL, module=NULL)
 
   ## S4 methods for signatures
   #  f='character', sig='list', body='list'
@@ -92,6 +93,20 @@
   be fully formed as for example \code{c("-L/usr/local/lib/foo -lfoo",
   "--lpthread")} and are passed along verbatim.}
     
+  \item{dim}{Optional character vector defining the dimensionality of the 
+  function arguments. Of same length as \code{sig}. Fortran or F95 only.}
+    
+  \item{implicit}{A character vector defining the implicit declaration in 
+  Fortran or F95; the default is to use the implicit typing rules for Fortran, 
+  which is \code{integer} for names starting with the letters \code{I} through
+  \code{N}, and \code{real} for names beginning with any other letter.
+  As \code{R} passes double precision, this is not the best choice. 
+  Safest is to choose \code{implicit = "none"} which will require all names
+  in the subroutine to be explicitly declared.}
+
+  \item{module}{Name(s) of any modules to be used in the \code{Fortran} or 
+  \code{F95} subroutine.}
+
   \item{...}{ Reserved.}
 }
 
@@ -150,17 +165,60 @@ x <- as.numeric(1:10)
 n <- as.integer(10)
 
 \dontrun{
-## A simple Fortran example
+## A simple Fortran example - n and x: assumed-size vector
 code <- "
       integer i
       do 1 i=1, n(1)
     1 x(i) = x(i)**3
 "
 cubefn <- cfunction(signature(n="integer", x="numeric"), code, convention=".Fortran")
+print(cubefn)
 
 cubefn(n, x)$x
+
+## Same Fortran example - now n is one number
+code2 <- "
+      integer i
+      do 1 i=1, n 
+    1 x(i) = x(i)**3
+"
+cubefn2 <- cfunction(signature(n="integer", x="numeric"), implicit = "none", 
+  dim = c("", "(*)"), code2, convention=".Fortran")
+
+cubefn2(n, x)$x
+
+## Same in F95, now x is fixed-size vector (length = n)
+code3 <- "x = x*x*x"
+cubefn3 <- cfunction(sig = signature(n="integer", x="numeric"), implicit = "none", 
+  dim = c("", "(n)"), code3, language="F95")
+cubefn3(20, 1:20)
+print(cubefn3)
+
+## Same example in C
+code4 <- "
+      int i;
+      for (i = 0; i < *n; i++) 
+        x[i] = x[i]*x[i]*x[i];
+"
+cubefn4 <- cfunction(signature(n="integer", x="numeric"), code4, language = "C", convention = ".C")
+cubefn4(20, 1:20)
+
 }
 
+ ## use of a module in F95
+modct <- "module modcts
+double precision, parameter :: pi = 3.14159265358979
+double precision, parameter :: e = 2.71828182845905
+end"
+
+getconstants <- "x(1) = pi
+x(2) = e"
+
+cgetcts <- cfunction(getconstants, module = "modcts", implicit = "none",
+  includes = modct, sig = c(x = "double"), dim = c("(2)"), language = "F95")
+
+cgetcts(x = 1:2)  
+print(cgetcts)
 
 ## Use of .C convention with C code
 ## Defining two functions, one of which calls the other
