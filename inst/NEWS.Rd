@@ -7,7 +7,8 @@
     \item Removed call to \code{Rcpp::RcppLdFlags()} which is no longer needed
     \item With move of repository to GitHub, added a \code{.travis.yml}
     file and corresponding entry in \code{.Rbuildignore}
-    \item Replaces calls to \code{require()} with calls to \code{requireNamespace()}
+    \item Replaced calls to \code{require()} with calls to
+    \code{requireNamespace()}; also updated one call
     \item Much improved support for Fortran and Fortran95 thanks to
       Karline Soetaert who became a package co-author
     \item New helper functions \code{writeDynLib} and \code{readDynLib}

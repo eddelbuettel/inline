@@ -18,7 +18,7 @@ registerPlugin <- function( name, plugin ){
 getPlugin <- function( name, ... ){
 	if( name %in% ls( plugins ) ){
 		plugins[[ name ]]( ... )
-	} else if( sprintf("package-%s", name) %in% search() || requireNamespace( name, character.only = TRUE, quietly = TRUE) ){
+	} else if( sprintf("package:%s", name) %in% search() || requireNamespace( name, quietly = TRUE) ){
 		plugin <- get( "inlineCxxPlugin" , asNamespace(name) )
 		if( is.null(plugin) ){
 			stop( sprintf( "package '%s' does not define an inline plugin", name ) )
