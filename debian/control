@@ -2,8 +2,8 @@ Source: r-cran-inline
 Section: gnu-r
 Priority: optional
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
-Build-Depends: debhelper (>= 7.0.0), r-base-dev (>= 3.0.1), cdbs
-Standards-Version: 3.9.4
+Build-Depends: debhelper (>= 7.0.0), r-base-dev (>= 3.1.3), cdbs
+Standards-Version: 3.9.6
 Homepage: http://cran.r-project.org/web/packages/inline/index.html
 
 Package: r-cran-inline

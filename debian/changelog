@@ -1,3 +1,12 @@
+r-cran-inline (0.3.14-1) unstable; urgency=low
+
+  * New upstream release
+
+  * debian/control: Set Build-Depends: to current R version
+  * debian/control: Set Standards-Version: to current version
+
+ -- Dirk Eddelbuettel <edd@debian.org>  Wed, 15 Apr 2015 09:07:17 -0500
+
 r-cran-inline (0.3.13-1) unstable; urgency=low
 
   * New upstream version
