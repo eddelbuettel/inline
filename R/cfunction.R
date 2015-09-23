@@ -49,7 +49,7 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   }
 
   if (Rcpp) {
-      if (!requireNamespace(Rcpp)) stop("Rcpp cannot be loaded, install it or use the default Rcpp=FALSE")
+      if (!requireNamespace("Rcpp")) stop("Rcpp cannot be loaded, install it or use the default Rcpp=FALSE")
       cxxargs <- c(Rcpp:::RcppCxxFlags(), cxxargs)	# prepend information from Rcpp
   }
   if (length(cppargs) != 0) {
