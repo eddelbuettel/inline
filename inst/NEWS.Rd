@@ -2,6 +2,14 @@
 \title{News for Package 'inline'}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in inline version 0.3.15 (2015-10-01)}{
+  \itemize{
+    \item Correct \code{requireNamespace()} call thanks to pull request
+    #5 by Alexander Grueneberg (and some further changes)
+    \item Small simplification to \code{.travis.yml}
+  }
+}
+
 \section{Changes in inline version 0.3.14 (2015-04-11)}{
   \itemize{
     \item Removed call to \code{Rcpp::RcppLdFlags()} which is no longer needed
