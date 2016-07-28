@@ -1,12 +1,16 @@
 \name{NEWS}
 \title{News for Package 'inline'}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
+\newcommand{\ghpr}{\href{https://github.com/eddelbuettel/inline/pull/#1}{##1}}
+\newcommand{\ghit}{\href{https://github.com/eddelbuettel/inline/issues/#1}{##1}}
 
 \section{Changes in inline version 0.3.15 (2015-10-01)}{
   \itemize{
-    \item Correct \code{requireNamespace()} call thanks to pull request
-    #5 by Alexander Grueneberg (and some further changes)
+    \item Correct \code{requireNamespace()} call thanks to PR
+    \ghpr{5} by Alexander Grueneberg (and some further changes)
     \item Small simplification to \code{.travis.yml}
+    \item Use \code{seq_along} instead of \code{seq(along=...)} (PR
+    \ghpr{6} by Watal M. Iwasaki)
   }
 }
 
