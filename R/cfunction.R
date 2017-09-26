@@ -290,7 +290,11 @@ compileCode <- function(f, code, language, verbose) {
 
   setwd(dirname(libCFile))
   errfile <- paste( basename(libCFile), ".err.txt", sep = "" )
-  cmd <- paste(R.home(component="bin"), "/R CMD SHLIB ", basename(libCFile), " 2> ", errfile, sep="")
+  binpref <- Sys.getenv("BINPREF")
+  cmd <- paste(
+    "BINPREF=", binpref, " ",
+    R.home(component="bin"), "/R CMD SHLIB ", 
+    basename(libCFile), " 2> ", errfile, sep="")
   if (verbose) cat("Compilation argument:\n", cmd, "\n")
   compiled <- system(cmd, intern=!verbose)
   errmsg <- readLines( errfile )
