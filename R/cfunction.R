@@ -298,7 +298,7 @@ compileCode <- function(f, code, language, verbose) {
   unlink( errfile )
 
   if ( !file.exists(libLFile) && file.exists(libLFile2) ) libLFile <- libLFile2
-  if ( !file.exists(libLFile) )
+  if ( !file.exists(libLFile) ) {
     cat("\nERROR(s) during compilation: source code errors or compiler configuration errors!\n")
     if ( !verbose ) system2(cmd, args = paste(" CMD SHLIB --dry-run --preclean", basename(libCFile)))
     cat("\nProgram source:\n")
