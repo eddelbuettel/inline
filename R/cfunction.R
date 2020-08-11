@@ -295,13 +295,13 @@ compileCode <- function(f, code, language, verbose) {
   compiled <- system2(cmd, args = paste(" CMD SHLIB", basename(libCFile)), stderr = errfile)
   errmsg <- readLines( errfile )
   unlink( errfile )
-  writeLines( errmsg )
+  if ( compiled != 0 ) writeLines( errmsg )
   setwd(wd)
 
   if ( !file.exists(libLFile) && file.exists(libLFile2) ) libLFile <- libLFile2
   if ( !file.exists(libLFile) ) {
     cat("\nERROR(s) during compilation: source code errors or compiler configuration errors!\n")
-    system2(cmd, args = paste(" CMD SHLIB --dry-run", basename(libCFile)))
+    if ( !verbose ) system2(cmd, args = paste(" CMD SHLIB --dry-run", basename(libCFile)))
     cat("\nProgram source:\n")
     code <- strsplit(code, "\n")
     for (i in 1:length(code[[1]])) cat(format(i,width=3), ": ", code[[1]][i], "\n", sep="")
