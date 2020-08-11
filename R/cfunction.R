@@ -296,7 +296,6 @@ compileCode <- function(f, code, language, verbose) {
                       stdout = FALSE, stderr = errfile)
   errmsg <- readLines( errfile )
   unlink( errfile )
-  if ( compiled != 0 ) writeLines( errmsg )
   setwd(wd)
 
   if ( !file.exists(libLFile) && file.exists(libLFile2) ) libLFile <- libLFile2
@@ -306,7 +305,9 @@ compileCode <- function(f, code, language, verbose) {
     cat("\nProgram source:\n")
     code <- strsplit(code, "\n")
     for (i in 1:length(code[[1]])) cat(format(i,width=3), ": ", code[[1]][i], "\n", sep="")
-    stop( paste( "Compilation ERROR, function(s)/method(s) not created!", paste( errmsg , collapse = "\n" ) ) )
+    cat("\nCompilation ERROR, function(s)/method(s) not created!\n")
+    if ( nchar(errmsg) > getOption("warning.length") ) stop(tail(errmsg))
+    else stop(errmsg)
   }
   return( libLFile )
 }
