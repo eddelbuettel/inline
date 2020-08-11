@@ -296,16 +296,11 @@ compileCode <- function(f, code, language, verbose) {
                       stdout = FALSE, stderr = errfile)
   errmsg <- readLines( errfile )
   unlink( errfile )
-  setwd(wd)
 
   if ( !file.exists(libLFile) && file.exists(libLFile2) ) libLFile <- libLFile2
-  if ( !file.exists(libLFile) ) {
+  if ( !file.exists(libLFile) )
     cat("\nERROR(s) during compilation: source code errors or compiler configuration errors!\n")
-    if ( !verbose ) {
-      LIBCFILE <- file.path(dirname(libCFile), toupper(basename(libCFile)))
-      file.rename(libCFile, LIBCFILE)
-      system2(cmd, args = paste(" CMD SHLIB --dry-run --preclean", basename(LIBCFILE)))
-    }
+    if ( !verbose ) system2(cmd, args = paste(" CMD SHLIB --dry-run --preclean", basename(libCFile)))
     cat("\nProgram source:\n")
     code <- strsplit(code, "\n")
     for (i in 1:length(code[[1]])) cat(format(i,width=3), ": ", code[[1]][i], "\n", sep="")
