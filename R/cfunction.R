@@ -292,7 +292,8 @@ compileCode <- function(f, code, language, verbose) {
   errfile <- paste( basename(libCFile), ".err.txt", sep = "" )
   cmd <- paste0(R.home(component="bin"), "/R")
   if ( verbose ) system2(cmd, args = paste(" CMD SHLIB --dry-run", basename(libCFile)))
-  compiled <- system2(cmd, args = paste(" CMD SHLIB", basename(libCFile)), stderr = errfile)
+  compiled <- system2(cmd, args = paste(" CMD SHLIB", basename(libCFile)),
+                      stdout = FALSE, stderr = errfile)
   errmsg <- readLines( errfile )
   unlink( errfile )
   if ( compiled != 0 ) writeLines( errmsg )
