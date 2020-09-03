@@ -290,21 +290,23 @@ compileCode <- function(f, code, language, verbose) {
 
   setwd(dirname(libCFile))
   errfile <- paste( basename(libCFile), ".err.txt", sep = "" )
-  cmd <- paste(R.home(component="bin"), "/R CMD SHLIB ", basename(libCFile), " 2> ", errfile, sep="")
-  if (verbose) cat("Compilation argument:\n", cmd, "\n")
-  compiled <- system(cmd, intern=!verbose)
+  cmd <- paste0(R.home(component="bin"), "/R")
+  if ( verbose ) system2(cmd, args = paste(" CMD SHLIB --dry-run", basename(libCFile)))
+  compiled <- system2(cmd, args = paste(" CMD SHLIB", basename(libCFile)),
+                      stdout = FALSE, stderr = errfile)
   errmsg <- readLines( errfile )
   unlink( errfile )
-  writeLines( errmsg )
-  setwd(wd)
 
   if ( !file.exists(libLFile) && file.exists(libLFile2) ) libLFile <- libLFile2
   if ( !file.exists(libLFile) ) {
     cat("\nERROR(s) during compilation: source code errors or compiler configuration errors!\n")
+    if ( !verbose ) system2(cmd, args = paste(" CMD SHLIB --dry-run --preclean", basename(libCFile)))
     cat("\nProgram source:\n")
     code <- strsplit(code, "\n")
     for (i in 1:length(code[[1]])) cat(format(i,width=3), ": ", code[[1]][i], "\n", sep="")
-    stop( paste( "Compilation ERROR, function(s)/method(s) not created!", paste( errmsg , collapse = "\n" ) ) )
+    cat("\nCompilation ERROR, function(s)/method(s) not created!\n")
+    if ( sum(nchar(errmsg)) > getOption("warning.length") ) stop(tail(errmsg))
+    else stop(errmsg)
   }
   return( libLFile )
 }
