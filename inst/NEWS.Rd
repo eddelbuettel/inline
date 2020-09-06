@@ -3,7 +3,7 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/inline/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/inline/issues/#1}{##1}}
 
-\section{Changes in inline version 0.3.16 (2020-09-xx)}{
+\section{Changes in inline version 0.3.16 (2020-09-06)}{
   \itemize{
     \item Maintenance updates to README.md standardizing badges (Dirk).
     \item Maintenance update to Travis CI setup (Dirk).
