@@ -3,6 +3,15 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/inline/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/inline/issues/#1}{##1}}
 
+\section{Changes in inline version 0.3.16 (2020-09-xx)}{
+  \itemize{
+    \item Maintenance updates to README.md standardizing badges (Dirk).
+    \item Maintenance update to Travis CI setup (Dirk).
+    \item Switch to using \code{system2()} for better error diagnostics
+    (Ben Goodrich in \ghpr{12}).
+  }
+}
+
 \section{Changes in inline version 0.3.15 (2018-05-18)}{
   \itemize{
     \item Correct \code{requireNamespace()} call thanks (Alexander
