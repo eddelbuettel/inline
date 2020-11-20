@@ -129,6 +129,7 @@ writeDynLib(cubefn, bname = "testname", directory = tempdir())
 
 # load from the two files generated and assign different name to object
 cfn <- readDynLib("testname", directory = tempdir())
+cfn(n, x)
 
 getDynLib(cfn)
 environment(cfn@.Data)$f
