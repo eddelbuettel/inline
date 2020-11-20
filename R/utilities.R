@@ -22,7 +22,10 @@ writeDynLib <- function(x, bname, directory = ".") {
 
   # accessory file with compiled code information (DLL name has changed)
   fileCF <- file.path(directory, paste(bname, "CFunc", sep = "."))
+
   attributes(x)$DLL <- newDLLname
+  environment(x@.Data)$libLFile <- newDLLname
+  environment(x@.Data)$f <- bname
 
   # names of functions in compiled code
   if (class(x) == "CFunc")
