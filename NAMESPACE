@@ -5,8 +5,10 @@ export(
     "cfunction",
     "cxxfunction",
     "getPlugin",
+    "readDynLib",
     "registerPlugin",
-    "rcpp"
+    "rcpp",
+    "writeDynLib"
 )
 
 exportMethods(
