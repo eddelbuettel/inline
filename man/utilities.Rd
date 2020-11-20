@@ -74,7 +74,7 @@
 
   Function \code{readDynLib} returns a \code{CFunc} or \code{CFuncList} object.
 
-  Function \code{writeDynLib} returns the name of the \code{.CFunc} file that 
+  Function \code{writeDynLib} returns the name of the \code{.CFunc} file that
   was created.
 }
 
@@ -126,16 +126,14 @@ cubefn(n, x)$x
 
 \dontrun{
 writeDynLib(cubefn, bname = "testname", directory = tempdir())
-dir(tempdir())
-# load and assign different name to object
+
+# load from the two files generated and assign different name to object
 cfn <- readDynLib("testname", directory = tempdir())
 
- # We still have remainders of the original locations and names:
 getDynLib(cfn)
- environment(cfn@.Data)$f
- environment(cfn@.Data)$libLFile
- # although the DLL attribute points to the new DLL
- attributes(cfn)
+environment(cfn@.Data)$f
+environment(cfn@.Data)$libLFile
+attributes(cfn)
 }
 
 }
