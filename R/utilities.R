@@ -16,8 +16,6 @@ writeDynLib <- function(x, bname, directory = ".") {
   extension <- unlist(strsplit(basename(DLLname), ".", fixed = TRUE))[2]
   newDLLname <- file.path(directory, paste(bname, extension, sep = "."))
 
-  try(dyn.unload(newDLLname), silent = TRUE)
-
   file.copy(from = DLLname, to = newDLLname, overwrite = TRUE)
 
   # accessory file with compiled code information (DLL name has changed)
