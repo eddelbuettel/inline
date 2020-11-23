@@ -8,28 +8,21 @@ writeDynLib <- function(x, bname, directory = ".") {
   if (is.null(DLL))
     stop ("'x' DLL not loaded")
 
-  DLLname <- DLL[["path"]]
-  if (!file.exists(DLLname))
+  DLLpath <- DLL[["path"]]
+  if (!file.exists(DLLpath))
     stop ("'x' does not point to an existing DLL")
 
   # get extension of filename  (dll, so)
-  extension <- unlist(strsplit(basename(DLLname), ".", fixed = TRUE))[2]
-  newDLLname <- file.path(directory, paste(bname, extension, sep = "."))
+  extension <- unlist(strsplit(basename(DLLpath), ".", fixed = TRUE))[2]
+  newDLLpath <- file.path(directory, paste(bname, extension, sep = "."))
 
-  file.copy(from = DLLname, to = newDLLname, overwrite = TRUE)
+  file.copy(from = DLLpath, to = newDLLpath, overwrite = TRUE)
 
-  # accessory file with compiled code information (DLL name has changed)
+  # accessory file with compiled code information (DLL path has changed)
   fileCF <- file.path(directory, paste(bname, "CFunc", sep = "."))
 
-  attributes(x)$DLL <- newDLLname
-  environment(x@.Data)$libLFile <- newDLLname
-  environment(x@.Data)$f <- bname
-
-  # names of functions in compiled code
-  if (class(x) == "CFunc")
-    attributes(x)$fname <- DLL[["name"]]
-  else
-    attributes(x)$fname <- names(x)
+  environment(x@.Data)$libLFile <- newDLLpath
+  environment(x@.Data)$f <- bname # getDynLib uses f as DLL name to check if the DLL is loaded
 
   save(file = fileCF, x)
 
@@ -47,30 +40,21 @@ readDynLib <- function(bname, directory = ".") {
     stop (fileCF,  " does not exist")
 
   CF <- get(load(file = fileCF))
-  attrs <- attributes(CF)
-  DLLname <- attrs$DLL
 
-  if (!file.exists(DLLname))
-    stop ("'file' does not point to valid CFunc object: DLL ", DLLname, " does not exist")
+  CF_env <- environment(CF)
+  DLLpath <- CF_env$libLFile
 
-# load routines in DLL
+  if (!file.exists(DLLpath))
+    stop ("'file' does not point to valid CFunc object: DLL ", DLLpath, " does not exist")
 
-  DLL <- dyn.load(DLLname)
-  fn <- attributes(CF)$fname
-  if (class(CF) == "CFunc") {
-    CFi <- CF
-    code <- CFi@code
-    body(CFi)[[2]] <- getNativeSymbolInfo(fn, DLL)$address
-    CF@.Data <- CFi
-  } else
-    for (i in 1:length(CF))  {
-      CFi <- CF[[i]]
-      code <- CFi@code
-      body(CFi)[[2]] <- getNativeSymbolInfo(fn[i], DLL)$address
-      CF[[i]]@.Data <- CFi
-    }
+  # load routines in DLL
 
-  attributes(CF) <- attrs
+  DLL <- dyn.load(DLLpath)
+  fn <- CF_env$name
+  CFi <- CF
+  code <- CFi@code
+  body(CFi)[[2]] <- getNativeSymbolInfo(fn, DLL)$address
+  CF@.Data <- CFi
   return(CF)
 }
 
