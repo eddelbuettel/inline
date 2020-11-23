@@ -20,7 +20,7 @@
             convention=c(".Call", ".C", ".Fortran"),
             Rcpp=FALSE,
             cppargs=character(), cxxargs=character(), libargs=character(),
-            dim=NULL, implicit=NULL, module=NULL)
+            dim=NULL, implicit=NULL, module=NULL, name=NULL)
 
   ## S4 methods for signatures
   #  f='character', sig='list', body='list'
@@ -106,6 +106,9 @@
 
   \item{module}{Name(s) of any modules to be used in the \code{Fortran} or 
   \code{F95} subroutine.}
+
+  \item{name}{Function name to be used in the code. Only used in the case
+  of a single signature}
 
   \item{...}{ Reserved.}
 }
