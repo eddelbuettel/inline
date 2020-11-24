@@ -7,7 +7,7 @@ Author: Oleg Sklyar, Duncan Murdoch, Mike Smith, Dirk Eddelbuettel,
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Depends: R (>= 2.4.0)
 Imports: methods
-Suggests: Rcpp (>= 0.11.0)
+Suggests: Rcpp (>= 0.11.0), tinytest
 Description: Functionality to dynamically define R functions and S4 methods
  with 'inlined' C, C++ or Fortran code supporting the .C and .Call calling
  conventions.
