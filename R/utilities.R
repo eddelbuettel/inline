@@ -1,7 +1,7 @@
 ## ---------------------------------------------------------------------------
 # saving and loading CFunc objects
 
-writeDynLib <- function(x, bname, directory = ".") {
+writeDynLib <- function(x, file, directory = ".") {
 
   DLL <- getDynLib(x)
 
@@ -14,15 +14,15 @@ writeDynLib <- function(x, bname, directory = ".") {
 
   # get extension of filename  (dll, so)
   extension <- unlist(strsplit(basename(DLLpath), ".", fixed = TRUE))[2]
-  newDLLpath <- file.path(directory, paste(bname, extension, sep = "."))
+  newDLLpath <- file.path(directory, paste(file, extension, sep = "."))
 
   file.copy(from = DLLpath, to = newDLLpath, overwrite = TRUE)
 
   # accessory file with compiled code information (DLL path has changed)
-  fileCF <- file.path(directory, paste(bname, "CFunc", sep = "."))
+  fileCF <- file.path(directory, paste(file, "CFunc", sep = "."))
 
   environment(x@.Data)$libLFile <- newDLLpath
-  environment(x@.Data)$f <- bname # getDynLib uses f as DLL name to check if the DLL is loaded
+  environment(x@.Data)$f <- file # getDynLib uses f as DLL name to check if the DLL is loaded
 
   save(file = fileCF, x)
 
@@ -31,10 +31,10 @@ writeDynLib <- function(x, bname, directory = ".") {
 
 ## ---------------------------------------------------------------------------
 
-readDynLib <- function(bname, directory = ".") {
+readDynLib <- function(file, directory = ".") {
 
   # open all the required files
-  fileCF <- file.path(directory, paste(bname, "CFunc", sep = "."))
+  fileCF <- file.path(directory, paste(file, "CFunc", sep = "."))
 
   if (!file.exists(fileCF))
     stop (fileCF,  " does not exist")

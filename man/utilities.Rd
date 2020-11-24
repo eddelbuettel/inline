@@ -22,8 +22,8 @@
 }
 
 \usage{
-  writeDynLib(x, bname, directory = ".")
-  readDynLib(bname, directory = ".")
+  writeDynLib(x, file, directory = ".")
+  readDynLib(file, directory = ".")
 }
 
 \section{Methods}{
@@ -58,7 +58,7 @@
 
   \item{x}{A \code{CFunc} or \code{CFuncList} object as created by \code{\link{cfunction}} to be saved.}
 
-  \item{bname}{base name of the file to write the object to or to read from.
+  \item{file}{Base of the file names to write the object to or to read from.
     Two files will be saved, one for the shared object or DLL (extension \code{.so}
     or \code{.dll}) and one that holds the \code{CFunc} specification, without
     the function address (extension \code{.CFunc}).}
@@ -125,7 +125,7 @@ code(cubefn)
 cubefn(n, x)$x
 
 \dontrun{
-writeDynLib(cubefn, bname = "testname", directory = tempdir())
+writeDynLib(cubefn, file = "testname", directory = tempdir())
 
 # load from the two files generated and assign different name to object
 cfn <- readDynLib("testname", directory = tempdir())
