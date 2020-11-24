@@ -1,6 +1,7 @@
 library(inline)
-n = 10L
-x = 1:10
+
+n <- 10L
+x <- 1:10
 
 ## A simple Fortran example - n and x: assumed-size vector
 code <- "
