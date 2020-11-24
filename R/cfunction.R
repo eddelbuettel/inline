@@ -31,14 +31,16 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
 
   f <- basename(tempfile())
 
+  if (is.null(name)) {
+    name <- f
+  }
+
   if ( !is.list(sig) ) {
     sig <- list(sig)
-    if (is.null(name)) {
-      name <- f
-    }
     names(sig) <- name
     names(body) <- name
   }
+
   if( length(sig) != length(body) )
     stop("mismatch between the number of functions declared in 'sig' and the number of function bodies provided in 'body'")
 
@@ -262,7 +264,7 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   remove(list = c("args", "body", "fn", "funCsig", "i", "includes", "j"))
 
   ## RETURN THE FUNCTION
-  if (length(res) == 1 && names(res) == f) return( res[[1]] )
+  if (length(res) == 1 && names(res) == name) return( res[[1]] )
   else return( new( "CFuncList", res ) )
 }
 
