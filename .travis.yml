@@ -8,8 +8,8 @@ jobs:
   include:
     - name: linux
       os: linux
-    - name: macOS
-      os: osx
+    #- name: macOS
+    #  os: osx
 
 env:
   global:
