@@ -107,8 +107,8 @@
   \item{module}{Name(s) of any modules to be used in the \code{Fortran} or 
   \code{F95} subroutine.}
 
-  \item{name}{Function name to be used in the code. Only used in the case
-  of a single signature}
+  \item{name}{Function name to be used in the code. Only used if 
+    \code{sig} is not a list.}
 
   \item{...}{ Reserved.}
 }
