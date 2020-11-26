@@ -9,7 +9,7 @@
     \ghpr{15} addressing \ghit{14}).
     \item CI was updated to use focal and run.sh from r-ci (Dirk)
     \item The writing and reading of compiled code was refactored and
-    extended (Johannes in \ghpr{16}).
+    extended (Johannes in \ghpr{16} fixing \ghit{13}).
   }
 }
 
