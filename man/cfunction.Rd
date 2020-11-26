@@ -40,7 +40,10 @@
 
   \item{sig}{A match of formal argument names for the function with the
     character-string names of corresponding classes. Alternatively,
-    a list of such character vectors. }
+    a named list of such character vectors. The names of the list elements will
+    be used as function names (see example). If \code{sig} is not a list,
+    the function name used in the code can be specified by the \code{name}
+    argument.  }
 
   \item{body}{ A character vector with C, C++ or Fortran code omitting function
     declaration (only the body, i.e. in case of C starting after the function
