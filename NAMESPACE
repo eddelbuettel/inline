@@ -5,14 +5,17 @@ export(
     "cfunction",
     "cxxfunction",
     "getPlugin",
+    "readCFunc",
     "registerPlugin",
-    "rcpp"
+    "rcpp",
+    "writeCFunc"
 )
 
 exportMethods(
     "setCMethod",
     "getDynLib",
     "package.skeleton",
+    "moveDLL",
     "print",
     "code"
 )

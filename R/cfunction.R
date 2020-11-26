@@ -16,7 +16,7 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
                       language=c("C++", "C", "Fortran", "F95", "ObjectiveC", "ObjectiveC++"),
                       verbose=FALSE, convention=c(".Call", ".C", ".Fortran"), Rcpp=FALSE,
                       cppargs=character(), cxxargs=character(), libargs=character(),
-                      dim = NULL, implicit = NULL, module = NULL) {
+                      dim = NULL, implicit = NULL, module = NULL, name = NULL) {
 
  if (missing (convention) & !missing(language))
       convention <- switch (EXPR = language, "Fortran" = ".Fortran", "F95" = ".Fortran", ".C" = ".C", ObjectiveC = ".Call", "ObjectiveC++" = ".Call", "C++" = ".Call")
@@ -31,11 +31,16 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
 
   f <- basename(tempfile())
 
+  if (is.null(name)) {
+    name <- f
+  }
+
   if ( !is.list(sig) ) {
     sig <- list(sig)
-    names(sig) <- f
-    names(body) <- f
+    names(sig) <- name
+    names(body) <- name
   }
+
   if( length(sig) != length(body) )
     stop("mismatch between the number of functions declared in 'sig' and the number of function bodies provided in 'body'")
 
@@ -188,10 +193,14 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   ## WRITE AND COMPILE THE CODE
   libLFile <- compileCode(f, code, language, verbose)
 
+
   ## SET A FINALIZER TO PERFORM CLEANUP
+  # Make a copy of libLFile, as we may overwrite it later in writeDynLib(), and
+  # we don't want the finalizer to remove the new libLFile
+  libLFile_orig <- libLFile
   cleanup <- function(env) {
-    if ( f %in% names(getLoadedDLLs()) ) dyn.unload(libLFile)
-    unlink(libLFile)
+    if ( f %in% names(getLoadedDLLs()) ) dyn.unload(libLFile_orig)
+    unlink(libLFile_orig)
   }
   reg.finalizer(environment(), cleanup, onexit=TRUE)
 
@@ -255,7 +264,7 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   remove(list = c("args", "body", "fn", "funCsig", "i", "includes", "j"))
 
   ## RETURN THE FUNCTION
-  if (length(res) == 1 && names(res) == f) return( res[[1]] )
+  if (length(res) == 1 && names(res) == name) return( res[[1]] )
   else return( new( "CFuncList", res ) )
 }
 

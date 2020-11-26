@@ -1,91 +1,75 @@
-## ---------------------------------------------------------------------------
-# saving and loading CFunc objects (called write and read as it needs to
-# be assigned.
+setGeneric("moveDLL",
+  function(x, ...) {
+    standardGeneric("moveDLL")
+  }
+)
+ 
+setMethod("moveDLL",
+  signature(x = "CFunc"),
+  function(x, name, directory, unload = FALSE, overwrite = FALSE, verbose = FALSE) {
 
-writeDynLib <- function(x, file) {
+    # Check arguments
+    if (length(name) > 1) stop("Please only supply only one name")
+    if (length(directory) > 1) stop("Please only supply only one directory name")
 
-  DLL <- getDynLib(x)
-   
-  if (is.null(DLL))
-    stop ("'x' DLL not loaded")
-    
-  DLLname <- DLL[["path"]] 
-  if (!file.exists(DLLname))
-    stop ("'x' does not point to an existing DLL")
+    # Obtain path to DLL
+    old_path <- environment(x)$libLFile
 
-  # correct extension of filename  (dll, so)  
-  dname <- dirname(file)
-  bname <- unlist(strsplit(basename(file), ".", fixed = TRUE))[1]
-  extension <- unlist(strsplit(basename(DLLname), ".", fixed = TRUE))[2]
-  file <- paste(dname,bname, extension, sep = ".")
+    # Create new path
+    if (!dir.exists(directory)) stop("There is no directory ", directory)
+    extension <- tools::file_ext(old_path)
+    new_path <- file.path(directory, paste(name, extension, sep = "."))
 
-  try(dyn.unload(file), silent = TRUE)
+    active_paths <- sapply(getLoadedDLLs(), function(di) di[["path"]])
+    if (new_path %in% active_paths) {
+      if (unload) {
+        if (inherits(try(dyn.unload(new_path)), "try-error"))
+          stop("Could not unload ", new_path)
+      } else {
+        stop("DLL from ", new_path, " is in use")
+      }
+    }
 
-  file.copy(from = DLLname, to = file, overwrite = TRUE)
+    # Copy the DLL
+    copy_success <- file.copy(old_path, new_path, overwrite = overwrite)
+    if (!copy_success) stop("Failed to copy DLL from ", old_path, " to ", new_path)
+    if (verbose) message("Copied DLL from ", old_path, " to ", new_path)
 
-  # accessory file with compiled code information (DLL name has changed)
-  fileCF <- paste(dname,"/",bname, ".Cfunc", sep = "")
-  attributes(x)$DLL <- file
-  
-  # names of functions in compiled code
-  if (class(x) == "CFunc")
-    attributes(x)$fname <- DLL[["name"]]
-  else
-    attributes(x)$fname <- names(x)
-    
-  save(file = fileCF, x)
+    # Unload DLL and reload from its new location
+    dyn.unload(old_path)
+    new_dll_info <- dyn.load(new_path)
+
+    # Adjust the path that getDynLib uses
+    environment(x)$libLFile <- new_path
+
+    # Adjust the symbol info in the function body
+    function_name <- environment(x)$f
+    body(x)[[2]] <- getNativeSymbolInfo(function_name, new_dll_info[["name"]])$address
+
+    invisible(new_dll_info)
+  }
+)
+
+writeCFunc <- function(x, file) {
+  env <- environment(x)
+  if (identical(env$libLFile, env$libLFile_orig))
+    stop("Use moveDLL to prevent losing the DLL by garbage collection or session termination")
+
+  saveRDS(x, file = file)
 }
 
-## ---------------------------------------------------------------------------
+readCFunc <- function(file) {
+  x <- readRDS(file)
+  if (class(x) != "CFunc") stop(file, " does not contain a serialized CFunc object")
 
-readDynLib <- function(file) {
+  # Load the DLL
+  env <- environment(x)
+  dll_info <- dyn.load(env$libLFile)
 
-# open all the required files
-  extension <- unlist(strsplit(basename(file), ".", fixed = TRUE))[2]
-
-  if (is.na(extension)) {
-    extension <- "CFunc"
-    file <- paste(file, extension, sep = ".")
-  }
-    
-  if (extension != "CFunc")
-    stop ("'file' should point to a CFunc object, extension '.CFunc'")
-
-  if (!file.exists(file))
-    stop ("'file' does not exist")
-
-  CF <- get(load(file = file))
-  attrs <- attributes(CF)
-  DLLname <- attrs$DLL
-    
-  if (!file.exists(DLLname))
-    stop ("'file' does not point to valid CFunc object: DLL ", DLLname, " does not exist")
-
-#    cleanup <- function(env) {
-#        unlink(DLLname)
-#    }
-#    reg.finalizer(environment(), cleanup, onexit = TRUE)
-
-
-# load routines in DLL
-
-  DLL <- dyn.load(DLLname)
-  fn <- attributes(CF)$fname
-  if (class(CF) == "CFunc") {
-    CFi <- CF
-    code <- CFi@code
-    body(CFi)[[2]] <- getNativeSymbolInfo(fn, DLL)$address
-    CF@.Data <- CFi
-  } else
-    for (i in 1:length(CF))  {
-      CFi <- CF[[i]]
-      code <- CFi@code
-      body(CFi)[[2]] <- getNativeSymbolInfo(fn[i], DLL)$address
-      CF[[i]]@.Data <- CFi
-    }  
+  # Set the symbol info in the function body
+  body(x)[[2]] <- getNativeSymbolInfo(env$f, dll_info[["name"]])$address
   
-  attributes(CF) <- attrs  
-  return(CF)  
+  return(x)
 }
 
 setGeneric("code", function(x, ...) standardGeneric("code") )
@@ -93,11 +77,11 @@ setMethod( "code", signature( x = "character" ),
 function( x, linenumbers = TRUE ){
   lines <- strsplit(x, "\n")
   if (linenumbers)
-   for (i in 1:length(lines[[1]])) cat(format(i, width = 3), 
+   for (i in 1:length(lines[[1]])) cat(format(i, width = 3),
     ": ", lines[[1]][i], "\n", sep = "")
   else
    for (i in 1:length(lines[[1]])) cat(lines[[1]][i], "\n", sep = "")
-    
+
 } )
 setMethod( "code", signature( x = "CFunc" ), function( x, linenumbers = TRUE  ) code (x@code, linenumbers))
 setMethod( "code", signature( x = "CFuncList" ), function(x, linenumbers = TRUE ) code( x[[1L]], linenumbers ) )
@@ -107,8 +91,8 @@ setMethod( "code", signature( x = "CFuncList" ), function(x, linenumbers = TRUE 
 setMethod( "print", signature( x = "CFunc" ),
 function( x ){
   cat("An object of class 'CFunc'\n")
-	Dat <- x@.Data 
-	print(Dat)
+  Dat <- x@.Data
+  print(Dat)
   cat("code:\n")
   code(x)
 } )
@@ -116,7 +100,7 @@ function( x ){
 setMethod( "print", signature( x = "CFuncList" ), function(x) {
   cat("An object of class 'CFuncList'\n")
   for (i in 1:length(x)) {
-	  print(names(x)[i])
+    print(names(x)[i])
     print(x[[i]]@.Data )
     cat("\n")
   }
