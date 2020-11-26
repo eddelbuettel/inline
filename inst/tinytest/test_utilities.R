@@ -52,11 +52,9 @@ moveDLL(quadfn, name = "testname", directory = tempdir(), unload = TRUE,
   overwrite = TRUE)
 expect_identical(quadfn(5, 1:5), res_known)
 
-# Now the DLL is not always removed by garbage collection in normal use
-if (interactive()) {
-  gc()
-  expect_true(file.exists(environment(quadfn)$libLFile))
-}
+# Now the DLL is not removed by garbage collection
+gc()
+expect_true(file.exists(environment(quadfn)$libLFile))
 # But we still get the pointer removed when saving and restoring
 save(quadfn, file = quadfn_path)
 rm(quadfn)
