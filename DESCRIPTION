@@ -1,9 +1,9 @@
 Package: inline
 Version: 0.3.16.1
-Date: 2020-11-25
+Date: 2020-11-26
 Title: Functions to Inline C, C++, Fortran Function Calls from R
 Author: Oleg Sklyar, Duncan Murdoch, Mike Smith, Dirk Eddelbuettel, 
- Romain Francois, Karline Soetaert
+ Romain Francois, Karline Soetaert, Johannes Ranke
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Depends: R (>= 2.4.0)
 Imports: methods
