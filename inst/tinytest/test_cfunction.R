@@ -20,6 +20,12 @@ res_cube <- list(
 res_1 <- cubefn(n, x)
 expect_identical(res_cube, res_1)
 
+cubefn_named <- cfunction(signature(n = "integer", x = "numeric"), code,
+  convention = ".Fortran", name = "cubefn")
+expect_identical(cubefn_named(n, x), res_1)
+
+expect_true(grepl("cubefn", cubefn_named@code))
+
 ## Same Fortran example - now n is one number
 code2 <- "
       integer i
