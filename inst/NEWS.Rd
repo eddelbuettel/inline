@@ -3,6 +3,16 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/inline/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/inline/issues/#1}{##1}}
 
+\section{Changes in inline version 0.3.17 (2020-xx-yy)}{
+  \itemize{
+    \item Unit testing is now supported via \pkg{tinytest} (Johannes in
+    \ghpr{15} addressing \ghit{14}).
+    \item CI was updated to use focal and run.sh from r-ci (Dirk)
+    \item The writing and reading of compiled code was refactored and
+    extended (Johannes in \ghpr{16}).
+  }
+}
+
 \section{Changes in inline version 0.3.16 (2020-09-06)}{
   \itemize{
     \item Maintenance updates to README.md standardizing badges (Dirk).
