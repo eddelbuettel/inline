@@ -1,3 +1,4 @@
 debian
 \.travis\.yml
 .*\.tar\.gz
+\.github
