@@ -43,7 +43,7 @@ setMethod("moveDLL",
     environment(x)$libLFile <- new_path
 
     # Adjust the symbol info in the function body
-    function_name <- environment(x)$f
+    function_name <- environment(x)$name
     body(x)[[2]] <- getNativeSymbolInfo(function_name, new_dll_info[["name"]])$address
 
     invisible(new_dll_info)
@@ -62,14 +62,19 @@ readCFunc <- function(file) {
   x <- readRDS(file)
   if (class(x) != "CFunc") stop(file, " does not contain a serialized CFunc object")
 
+  # Get code for restoring after updating the function body
+  source_code <- x@code
+
   # Load the DLL
   env <- environment(x)
   dll_info <- dyn.load(env$libLFile)
 
   # Set the symbol info in the function body
-  body(x)[[2]] <- getNativeSymbolInfo(env$f, dll_info[["name"]])$address
+  body(x)[[2]] <- getNativeSymbolInfo(env$name, dll_info[["name"]])[["address"]]
+  x_cf <- as(x, "CFunc")
+  x_cf@code <- source_code
   
-  return(x)
+  return(x_cf)
 }
 
 setGeneric("code", function(x, ...) standardGeneric("code") )

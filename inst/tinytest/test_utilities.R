@@ -68,4 +68,14 @@ moveDLL(quadfn, name = "testname", directory = tempdir(), unload = TRUE,
   overwrite = TRUE)
 writeCFunc(quadfn, quadfn_path)
 quadfn_reloaded <- readCFunc(quadfn_path)
-expect_identical(quadfn_reloaded(5, 1:5), res_known)
+
+# Create a function with a user defined function name in the source code,
+# save and restore
+quadfn_named <- cfunction(signature(n = "integer", x = "numeric"), code,
+  language = "C", convention = ".C", name = "quadfn")
+moveDLL(quadfn_named, name = "quadfn_dll", directory = tempdir(), unload = TRUE,
+  overwrite = TRUE)
+writeCFunc(quadfn_named, quadfn_path)
+quadfn_named_reloaded <- readCFunc(quadfn_path)
+expect_identical(quadfn_named_reloaded(5, 1:5), res_known)
+expect_true(grepl("quadfn", quadfn_named_reloaded@code))
