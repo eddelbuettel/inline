@@ -275,29 +275,16 @@ compileCode <- function(f, code, language, verbose) {
   wd = getwd()
   on.exit(setwd(wd))
   ## Prepare temp file names
-  if ( .Platform$OS.type == "windows" ) {
-    ## windows files
-    dir <- gsub("\\\\", "/", tempdir())
-    libCFile  <- paste(dir, "/", f, ".EXT", sep="")
-    libLFile  <- paste(dir, "/", f, ".dll", sep="")
-    libLFile2 <- paste(dir, "/", f, ".dll", sep="")
-  }
-  else {
-    ## UNIX-alike build
-    libCFile  <- paste(tempdir(), "/", f, ".EXT",               sep="")
-    libLFile  <- paste(tempdir(), "/", f, .Platform$dynlib.ext, sep="")
-    libLFile2 <- paste(tempdir(), "/", f, ".sl",                sep="")
-  }
   extension <- switch(language, "C++"=".cpp", C=".c", Fortran=".f", F95=".f95",
                                 ObjectiveC=".m", "ObjectiveC++"=".mm")
-  libCFile <- sub(".EXT$", extension, libCFile)
+  libCFile <- file.path(tempdir(), paste0(f, extension))
+  libLFile <- file.path(tempdir(), paste0(f, .Platform$dynlib.ext))
 
   ## Write the code to the temp file for compilation
   write(code, libCFile)
 
   ## Compile the code using the running version of R if several available
   if ( file.exists(libLFile) ) file.remove( libLFile )
-  if ( file.exists(libLFile2) ) file.remove( libLFile2 )
 
   setwd(dirname(libCFile))
   errfile <- paste( basename(libCFile), ".err.txt", sep = "" )
@@ -308,7 +295,6 @@ compileCode <- function(f, code, language, verbose) {
   errmsg <- readLines( errfile )
   unlink( errfile )
 
-  if ( !file.exists(libLFile) && file.exists(libLFile2) ) libLFile <- libLFile2
   if ( !file.exists(libLFile) ) {
     cat("\nERROR(s) during compilation: source code errors or compiler configuration errors!\n")
     if ( !verbose ) system2(cmd, args = paste(" CMD SHLIB --dry-run --preclean", basename(libCFile)))
