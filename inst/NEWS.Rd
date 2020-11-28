@@ -7,9 +7,12 @@
   \itemize{
     \item Unit testing is now supported via \pkg{tinytest} (Johannes in
     \ghpr{15} addressing \ghit{14}).
-    \item CI was updated to use focal and run.sh from r-ci (Dirk)
+    \item CI was updated to use focal and run.sh from r-ci on Travis and
+    GitHub Actions (Dirk)
     \item The writing and reading of compiled code was refactored and
     extended (Johannes in \ghpr{16} fixing \ghit{13}).
+    \item Some minor problems related to CRAN checks and tests were corrected
+    (Johannes and Dirk in \ghpr{17}, Johannes in \ghpr{18} and \ghpr{19}).
   }
 }
 

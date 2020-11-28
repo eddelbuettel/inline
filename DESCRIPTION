@@ -1,6 +1,6 @@
 Package: inline
-Version: 0.3.16.2
-Date: 2020-11-26
+Version: 0.3.16.3
+Date: 2020-11-28
 Title: Functions to Inline C, C++, Fortran Function Calls from R
 Author: Oleg Sklyar, Duncan Murdoch, Mike Smith, Dirk Eddelbuettel, 
  Romain Francois, Karline Soetaert, Johannes Ranke
