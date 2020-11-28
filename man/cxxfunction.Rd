@@ -1,9 +1,7 @@
 \name{cxxfunction}
 \alias{cxxfunction}
 \alias{rcpp}
-\title{
-inline C++ function
-}
+\title{inline C++ function}
 \description{
 Functionality to dynamically define an R function with inlined C++ code
 using the \code{\link{.Call}} calling convention.
@@ -13,8 +11,8 @@ suitable for using \pkg{Rcpp}.
 }
 \usage{
 cxxfunction(sig = character(), body = character(), 
-	plugin = "default", includes = "", 
-	settings = getPlugin(plugin), ..., verbose = FALSE)
+            plugin = "default", includes = "", 
+            settings = getPlugin(plugin), ..., verbose = FALSE)
 rcpp(..., plugin="Rcpp")
 }
 \arguments{
@@ -26,48 +24,38 @@ rcpp(..., plugin="Rcpp")
   \item{\dots}{Further arguments to the plugin}
   \item{verbose}{verbose output}
 }
-\value{
-A function
-}
-\seealso{
-	\code{\link{cfunction}}
-}
+\value{A function}
+\seealso{\code{\link{cfunction}}}
 \examples{
 \dontrun{
-
 # default plugin
-fx <- cxxfunction( signature(x = "integer", y = "numeric" ) , '
-	return ScalarReal( INTEGER(x)[0] * REAL(y)[0] ) ;
-' )
-fx( 2L, 5 )
+fx <- cxxfunction(signature(x = "integer", y = "numeric"), 
+	          "return ScalarReal(INTEGER(x)[0] * REAL(y)[0]);")
+fx(2L, 5)
 
 # Rcpp plugin
-if( require( Rcpp ) ){
+if (requireNamespace("Rcpp", quietly=TRUE)) {
 
-	fx <- cxxfunction( signature(x = "integer", y = "numeric" ) , '
-		return wrap( as<int>(x) * as<double>(y) ) ;
-	', plugin = "Rcpp" )
-	fx( 2L, 5 )
+    fx <- cxxfunction(signature(x = "integer", y = "numeric"), 
+                      "return wrap( as<int>(x) * as<double>(y));",
+                      plugin = "Rcpp" )
+    fx(2L, 5)
 
-        ## equivalent shorter form using rcpp()
-	fx <- rcpp(signature(x = "integer", y = "numeric"),
-                   ' return wrap( as<int>(x) * as<double>(y) ) ; ')
-
+    ## equivalent shorter form using rcpp()
+    fx <- rcpp(signature(x = "integer", y = "numeric"),
+               "return wrap(as<int>(x) * as<double>(y));")
 }
 
 # RcppArmadillo plugin
-if( require( RcppArmadillo ) ){
+if (requireNamespace(RcppArmadillo)) {
 	
-	fx <- cxxfunction( signature(x = "integer", y = "numeric" ) , '
-		int dim = as<int>( x ) ;
-		arma::mat z = as<double>(y) * arma::eye<arma::mat>( dim, dim ) ;
-		return wrap( arma::accu(z) ) ;
-	', plugin = "RcppArmadillo" )
-	fx( 2L, 5 )
-	
-	
+    fx <- cxxfunction(signature(x = "integer", y = "numeric"),
+                      "int dim = as<int>(x);
+		       arma::mat z = as<double>(y) * arma::eye<arma::mat>(dim, dim);
+		       return wrap(arma::accu(z));",
+                      plugin = "RcppArmadillo")
+    fx(2L, 5)
 }
-
 }
 }
 \keyword{programming}
