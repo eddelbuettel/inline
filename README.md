@@ -1,6 +1,7 @@
 ## inline: Inline C, C++ and Fortran code from R
 
 [![Build Status](https://travis-ci.org/eddelbuettel/inline.png)](https://travis-ci.org/eddelbuettel/inline) 
+[![Build Status](https://github.com/eddelbuettel/inline/workflows/ci/badge.svg)](https://github.com/eddelbuettel/inline/actions?query=workflow%3Aci)
 [![License](https://img.shields.io/badge/license-LGPL%20%28%3E%3D%202%29-brightgreen)](https://www.gnu.org/licenses/lgpl-3.0.html) 
 [![CRAN](https://www.r-pkg.org/badges/version/inline)](https://cran.r-project.org/package=inline) 
 [![Dependencies](https://tinyverse.netlify.com/badge/inline)](https://cran.r-project.org/package=inline) 
@@ -19,12 +20,17 @@ supports the `.C`, `.Call` and `.Fortran` calling conventions.
 The package was originally written while Oleg Sklyar was at
 [EMBL-EBI](https://www.ebi.ac.uk/).  It was then extended by Dirk
 Eddelbuettel and Romain Francois for use by
-[Rcpp](https://dirk.eddelbuettel.com/code/rcpp.html). Karline Soetaert added
-support for Fortran.
+[Rcpp](https://dirk.eddelbuettel.com/code/rcpp.html). Years later, Karline
+Soetaert added support for Fortran. Johannes Ranke refactored some internals
+and added the ability to store and retrieve compiled code.
 
 ### Authors
 
-Oleg Sklyar, Dirk Eddelbuettel, Romain Francois, Karline Soetaert
+Oleg Sklyar, Dirk Eddelbuettel, Romain Francois, Karline Soetaert, Johannes Ranke
+
+### Maintainer
+
+Dirk Eddelbuettel
 
 ### License
 
