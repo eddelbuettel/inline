@@ -18,7 +18,7 @@ setMethod("moveDLL",
     # Create new path
     if (!dir.exists(directory)) stop("There is no directory ", directory)
     extension <- tools::file_ext(old_path)
-    new_path <- normalizePath(file.path(directory, paste(name, extension, sep = ".")))
+    new_path <- file.path(normalizePath(directory), paste(name, extension, sep = "."))
 
     active_paths <- sapply(getLoadedDLLs()[-1],
       function(di) normalizePath(di[["path"]]))
