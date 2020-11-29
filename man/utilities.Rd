@@ -31,18 +31,17 @@
 }
 
 \usage{
-  moveDLL(x, ...)
-  \S4method{moveDLL}{CFunc}(x, name, directory, unload = FALSE,
-    overwrite = FALSE, verbose = FALSE)
+moveDLL(x, ...)
+\S4method{moveDLL}{CFunc}(x, name, directory, unload = FALSE, overwrite = FALSE, verbose = FALSE)
 
-  writeCFunc(x, file)
-  readCFunc(file)
+writeCFunc(x, file)
+readCFunc(file)
 
-  \S4method{print}{CFunc}(x)
-  \S4method{print}{CFuncList}(x)
+\S4method{print}{CFunc}(x)
+\S4method{print}{CFuncList}(x)
 
-  \S4method{code}{CFunc}(x, linenumbers = TRUE)
-  \S4method{code}{CFuncList}(x, linenumbers = TRUE)
+\S4method{code}{CFunc}(x, linenumbers = TRUE)
+\S4method{code}{CFuncList}(x, linenumbers = TRUE)
 }
 
 \arguments{

@@ -28,20 +28,15 @@ Generate the skeleton of a package
 \examples{
 \dontrun{
 
-fx <- cxxfunction( signature(x = "integer", y = "numeric" ) , '
-	return ScalarReal( INTEGER(x)[0] * REAL(y)[0] ) ;
-' )
-package.skeleton( "foo", fx )
+fx <- cxxfunction(signature(x = "integer", y = "numeric"),
+	          "return ScalarReal( INTEGER(x)[0] * REAL(y)[0]);")
+package.skeleton("foo", fx)
 
-
-functions <- cxxfunction( 
-	list( 
-		ff = signature(), 
-		gg = signature( x = "integer", y = "numeric" )
-	), 
-	c( "return R_NilValue ;", "return ScalarReal( INTEGER(x)[0] * REAL(y)[0] ) ;")
-)
-package.skeleton( "foobar", functions )
+functions <- cxxfunction(list(ff = signature(), 
+                              gg = signature(x = "integer", y = "numeric")), 
+                         c("return R_NilValue ;",
+                           "return ScalarReal(INTEGER(x)[0] * REAL(y)[0]);"))
+package.skeleton("foobar", functions)
 
 }
 }
