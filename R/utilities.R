@@ -3,7 +3,7 @@ setGeneric("moveDLL",
     standardGeneric("moveDLL")
   }
 )
- 
+
 setMethod("moveDLL",
   signature(x = "CFunc"),
   function(x, name, directory, unload = FALSE, overwrite = FALSE, verbose = FALSE) {
@@ -18,7 +18,8 @@ setMethod("moveDLL",
     # Create new path
     if (!dir.exists(directory)) stop("There is no directory ", directory)
     extension <- tools::file_ext(old_path)
-    new_path <- file.path(normalizePath(directory), paste(name, extension, sep = "."))
+    new_path <- normalizePath(file.path(directory, paste(name, extension, sep = ".")),
+      mustWork = FALSE)
 
     active_paths <- sapply(getLoadedDLLs()[-1],
       function(di) normalizePath(di[["path"]]))
@@ -74,7 +75,7 @@ readCFunc <- function(file) {
   body(x)[[2]] <- getNativeSymbolInfo(env$name, dll_info[["name"]])[["address"]]
   x_cf <- as(x, "CFunc")
   x_cf@code <- source_code
-  
+
   return(x_cf)
 }
 
