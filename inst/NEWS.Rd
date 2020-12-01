@@ -3,7 +3,7 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/inline/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/inline/issues/#1}{##1}}
 
-\section{Changes in inline version 0.3.17 (2020-xx-yy)}{
+\section{Changes in inline version 0.3.17 (2020-11-30)}{
   \itemize{
     \item Unit testing is now supported via \pkg{tinytest} (Johannes in
     \ghpr{15} addressing \ghit{14}).
@@ -12,7 +12,9 @@
     \item The writing and reading of compiled code was refactored and
     extended (Johannes in \ghpr{16} fixing \ghit{13}).
     \item Some minor problems related to CRAN checks and tests were corrected
-    (Johannes and Dirk in \ghpr{17}, Johannes in \ghpr{18} and \ghpr{19}).
+    (Johannes and Dirk in \ghpr{17}, Johannes in \ghpr{18}, \ghpr{19}, \ghpr{20}).
+    \item Small stylistic updates have been applied to some R and Rd
+    files (Dirk).
   }
 }
 
