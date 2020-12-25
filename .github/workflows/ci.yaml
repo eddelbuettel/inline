@@ -14,11 +14,11 @@ jobs:
   build:
     strategy:
       matrix:
-        config:
+        include:
           #- {os: macOS-latest}
           - {os: ubuntu-latest}
 
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
