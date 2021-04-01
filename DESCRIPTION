@@ -13,4 +13,5 @@ Description: Functionality to dynamically define R functions and S4 methods
 License: LGPL
 Copyright: Oleg Sklyar, 2005-2010 and other authors per their commits
 LazyLoad: yes
+URL: https://github.com/eddelbuettel/inline, https://dirk.eddelbuettel.com/code/inline.html 
 BugReports: https://github.com/eddelbuettel/inline/issues
