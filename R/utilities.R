@@ -37,14 +37,10 @@ setMethod("moveDLL",
     if (!copy_success) stop("Failed to copy DLL from ", old_path, " to ", new_path)
     if (verbose) message("Copied DLL from ", old_path, " to ", new_path)
 
-    # Unload DLL and reload from its new location
-    dyn.unload(old_path)
-    new_dll_info <- dyn.load(new_path)
-
     # Adjust the path that getDynLib uses
     environment(x)$libLFile <- new_path
 
-    invisible(new_dll_info)
+    invisible()
   }
 )
 
