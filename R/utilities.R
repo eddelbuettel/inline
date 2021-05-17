@@ -9,8 +9,8 @@ setMethod("moveDLL",
   function(x, name, directory, unload = FALSE, overwrite = FALSE, verbose = FALSE) {
 
     # Check arguments
-    if (length(name) > 1) stop("Please only supply only one name")
-    if (length(directory) > 1) stop("Please only supply only one directory name")
+    if (length(name) > 1) stop("Please supply only one name")
+    if (length(directory) > 1) stop("Please supply only one directory name")
 
     # Obtain path to DLL
     old_path <- environment(x)$libLFile
@@ -37,18 +37,10 @@ setMethod("moveDLL",
     if (!copy_success) stop("Failed to copy DLL from ", old_path, " to ", new_path)
     if (verbose) message("Copied DLL from ", old_path, " to ", new_path)
 
-    # Unload DLL and reload from its new location
-    dyn.unload(old_path)
-    new_dll_info <- dyn.load(new_path)
-
     # Adjust the path that getDynLib uses
     environment(x)$libLFile <- new_path
 
-    # Adjust the symbol info in the function body
-    function_name <- environment(x)$name
-    body(x)[[2]] <- getNativeSymbolInfo(function_name, new_dll_info[["name"]])$address
-
-    invisible(new_dll_info)
+    invisible()
   }
 )
 
