@@ -3,10 +3,17 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/inline/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/inline/issues/#1}{##1}}
 
+\section{Changes in inline version 0.3.19 (2021-xx-yy)}{
+  \itemize{
+    \item Documentation for \code{moveDLL} was updated and extended
+    (Johannes in \ghpr{22}).
+  }
+}
+
 \section{Changes in inline version 0.3.18 (2021-05-17)}{
   \itemize{
     \item The \code{moveDLL} code and tests were updated for changed in
-    R-devel (Johannes in \ghpr{22} fixing \ghit{21})
+    R-devel (Johannes in \ghpr{22} fixing \ghit{21}).
   }
 }
 
