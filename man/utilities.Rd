@@ -137,8 +137,10 @@ cubefn(n, x)$x
 
 \dontrun{
 # The following code is exempted from the automated tests of example code, as
-# it writes to the users home directory
-moveDLL(cubefn, name = "cubefn", directory = "~") # this writes the DLL, e.g. cubefn.so or cubefn.dll
+# it writes to the users home directory.
+# The following writes the DLL, e.g. cubefn.so on Linux/Unix or cubefn.dll
+# on Windows
+moveDLL(cubefn, name = "cubefn", directory = "~")
 path <- file.path("~", "cubefn.rda")
 writeCFunc(cubefn, path)
 rm(cubefn)
