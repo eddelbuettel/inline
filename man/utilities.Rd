@@ -85,12 +85,13 @@ readCFunc(file)
 \details{
 
   If you move the DLL to a user defined location with \code{moveDLL}, this will
-  prevent removal of the DLL at garbage collection and, if not written to the
-  session \code{\link{tempdir}}, removal at session termination. However,
-  saving and reloading an object will still loose the pointer to the DLL.
-
-  Only if their DLL has been moved, \code{CFunc} objects can be saved by
-  \code{writeCFunc} and restored by \code{readCFunc}.
+  keep an on-disk copy of the DLL which will prevent it from being lost at
+  session termination - unless written to the session \code{\link{tempdir}}.
+  Saving and reloading the \code{CFunc} object with standard tools like
+  \code{\link{save}} or \code{\link{saveRDS}} will still loose the pointer to
+  the DLL. However, when the DLL has been moved using \code{moveDLL},
+  \code{CFunc} objects can be saved by \code{writeCFunc} and restored by
+  \code{readCFunc}.
 
 }
 
@@ -134,14 +135,20 @@ code(cubefn)
 
 cubefn(n, x)$x
 
-moveDLL(cubefn, name = "cubefn", directory = tempdir())
-path <- file.path(tempdir(), "cubefn.rda")
+\dontrun{
+# The following code is exempted from the automated tests of example code, as
+# it writes to the users home directory
+moveDLL(cubefn, name = "cubefn", directory = "~") # this writes the DLL, e.g. cubefn.so or cubefn.dll
+path <- file.path("~", "cubefn.rda")
 writeCFunc(cubefn, path)
 rm(cubefn)
 
+# Now you can start a fresh R session and load the function
+library(inline)
+path <- file.path("~", "cubefn.rda")
 cfn <- readCFunc(path)
 cfn(3, 1:3)$x
-
+}
 }
 
 \author{
