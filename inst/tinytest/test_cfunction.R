@@ -1,5 +1,7 @@
 library(inline)
 
+isSolaris <- Sys.info()[["sysname"]] == "SunOS"
+
 n <- 10L
 x <- 1:10
 
@@ -56,8 +58,9 @@ cubefn4 <- cfunction(signature(n = "integer", x = "numeric"), code4,
 res_4 <- cubefn4(n, x)
 expect_identical(res_4, res_cube)
 
+if (isSolaris) exit_file("Skip remainder")
 
- ## use of a module in F95
+## use of a module in F95
 modct <- "module modcts
 double precision, parameter :: pi = 3.14159265358979
 double precision, parameter :: e = 2.71828182845905
