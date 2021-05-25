@@ -1,5 +1,7 @@
 library(inline)
 
+isM1 <- grepl("aarch64-apple", R.version$platform)
+
 code <- "
       int i;
       for (i = 0; i < *n; i++)
@@ -21,6 +23,8 @@ expect_error(quadfn(5, 1:5), "NULL value passed as symbol address")
 # The DLL is removed by garbage collection
 gc()
 expect_false(file.exists(environment(quadfn)$libLFile))
+
+if (isM1) exit_file("Skip remainer")
 
 # So we recreate the function and move the DLL to a user defined location
 quadfn <- cfunction(signature(n = "integer", x = "numeric"), code,
