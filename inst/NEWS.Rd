@@ -3,10 +3,12 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/inline/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/inline/issues/#1}{##1}}
 
-\section{Changes in inline version 0.3.19 (2021-xx-yy)}{
+\section{Changes in inline version 0.3.19 (2021-05-25)}{
   \itemize{
     \item Documentation for \code{moveDLL} was updated and extended
     (Johannes in \ghpr{22}).
+    \item A few more tests were made conditional the test platform (Dirk
+    in \ghpr{24}).
   }
 }
 
