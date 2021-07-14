@@ -1,7 +1,0 @@
-#!/usr/bin/make -f
-# 							-*- makefile -*-
-# debian/rules file for the Debian/GNU Linux r-cran-inline package
-# Copyright 2005 - 2010 by Dirk Eddelbuettel <edd@debian.org>
-
-include /usr/share/R/debian/r-cran.mk
-
