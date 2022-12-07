@@ -292,7 +292,7 @@ compileCode <- function(f, code, language, verbose) {
   if ( verbose ) system2(cmd, args = paste(" CMD SHLIB --dry-run", basename(libCFile)))
   compiled <- system2(cmd, args = paste(" CMD SHLIB", basename(libCFile)),
                       stdout = FALSE, stderr = errfile)
-  errmsg <- readLines( errfile )
+  errmsg <- paste0(readLines(errfile), collapse = "\n")
   unlink( errfile )
 
   if ( !file.exists(libLFile) ) {
@@ -302,8 +302,10 @@ compileCode <- function(f, code, language, verbose) {
     code <- strsplit(code, "\n")
     for (i in 1:length(code[[1]])) cat(format(i,width=3), ": ", code[[1]][i], "\n", sep="")
     cat("\nCompilation ERROR, function(s)/method(s) not created!\n")
-    if ( sum(nchar(errmsg)) > getOption("warning.length") ) stop(tail(errmsg))
-    else stop(errmsg)
+    if ( nchar(errmsg) > getOption("warning.length") ) {
+      stop(substr(errmsg, start = nchar(errmsg) - getOption("warning.length") + 1,
+                  stop = nchar(errmsg)))
+    } else stop(errmsg)
   }
   return( libLFile )
 }
