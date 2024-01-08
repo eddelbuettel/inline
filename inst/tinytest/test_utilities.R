@@ -1,6 +1,7 @@
 library(inline)
 
 isM1 <- grepl("aarch64-apple", R.version$platform)
+isLinux <- Sys.info()[["sysname"]] == "Linux"
 
 code <- "
       int i;
@@ -25,6 +26,7 @@ gc()
 expect_false(file.exists(environment(quadfn)$libLFile))
 
 if (isM1) exit_file("Skip remainer")
+if (!isLinux) exit_file("Skip remainer")
 
 # So we recreate the function and move the DLL to a user defined location
 quadfn <- cfunction(signature(n = "integer", x = "numeric"), code,
