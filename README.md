@@ -5,7 +5,7 @@
 [![CRAN](https://www.r-pkg.org/badges/version/inline)](https://cran.r-project.org/package=inline) 
 [![CRAN use](https://jangorecki.gitlab.io/rdeps/inline/CRAN_usage.svg?sanitize=true)](https://cran.r-project.org/package=inline) 
 [![CRAN indirect](https://jangorecki.gitlab.io/rdeps/inline/indirect_usage.svg?sanitize=true)](https://cran.r-project.org/package=inline)
-[![Dependencies](https://tinyverse.netlify.com/badge/inline)](https://cran.r-project.org/package=inline)
+[![Dependencies](https://tinyverse.netlify.app/badge/inline)](https://cran.r-project.org/package=inline)
 [![Downloads](https://cranlogs.r-pkg.org/badges/inline?color=brightgreen)](https://www.r-pkg.org/pkg/inline) 
 [![Debian package](https://img.shields.io/debian/v/r-cran-inline/sid?color=brightgreen)](https://packages.debian.org/sid/r-cran-inline)
 [![Last Commit](https://img.shields.io/github/last-commit/eddelbuettel/inline)](https://github.com/eddelbuettel/inline)
