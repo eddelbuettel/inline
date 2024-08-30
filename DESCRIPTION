@@ -2,9 +2,17 @@ Package: inline
 Version: 0.3.19.1
 Date: 2021-07-14
 Title: Functions to Inline C, C++, Fortran Function Calls from R
-Author: Oleg Sklyar, Duncan Murdoch, Mike Smith, Dirk Eddelbuettel, 
- Romain Francois, Karline Soetaert, Johannes Ranke
-Maintainer: Dirk Eddelbuettel <edd@debian.org>
+Authors@R: c(person("Oleg", "Sklyar", role = "aut"),
+             person("Dirk", "Eddelbuettel", role = c("aut", "cre"), email = "edd@debian.org",
+                    comment = c(ORCID = "0000-0001-6419-907X")),
+             person("Romain", "Francois", role = "aut",
+                    comment = c(ORCID = "0000-0002-2444-4226")),
+             person("Mike", "Smith", role = "ctb"),
+             person("Duncan", "Murdoch", role = "ctb"),
+             person("Karline", "Soetaert", role = "ctb",
+                    comment = c(ORCID = "0000-0003-4603-7100")),
+             person("Johannes", "Ranke", role = "ctb",
+                    comment = c(ORCID = "0000-0003-4371-6538")))
 Imports: methods
 Suggests: Rcpp (>= 0.11.0), tinytest
 Description: Functionality to dynamically define R functions and S4 methods
