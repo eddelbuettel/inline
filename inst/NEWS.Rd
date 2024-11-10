@@ -3,11 +3,21 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/inline/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/inline/issues/#1}{##1}}
 
+\section{Changes in inline version 0.3.20 (2024-11-10)}{
+  \itemize{
+    \item Error message formatting is improved for \code{compileCode} (Alexis
+    Derumigny in \ghpr{25})
+    \item Switch to using Authors@R, other general packaging maintenance for
+    continuous integration and repository
+    \item Use \code{Rf_} in a handful of cases as R-devel now mandates it
+  }
+}
+
 \section{Changes in inline version 0.3.19 (2021-05-25)}{
   \itemize{
     \item Documentation for \code{moveDLL} was updated and extended
-    (Johannes in \ghpr{22}).
-    \item A few more tests were made conditional the test platform (Dirk
+    (Johannes in \ghpr{23}).
+    \item A few more tests were made conditional on the test platform (Dirk 
     in \ghpr{24}).
   }
 }
