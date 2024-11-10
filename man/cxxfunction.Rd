@@ -30,7 +30,7 @@ rcpp(..., plugin="Rcpp")
 \dontrun{
 # default plugin
 fx <- cxxfunction(signature(x = "integer", y = "numeric"), 
-	          "return ScalarReal(INTEGER(x)[0] * REAL(y)[0]);")
+	          "return Rf_ScalarReal(INTEGER(x)[0] * REAL(y)[0]);")
 fx(2L, 5)
 
 # Rcpp plugin

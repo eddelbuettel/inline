@@ -54,7 +54,7 @@ writeCFunc <- function(x, file) {
 
 readCFunc <- function(file) {
   x <- readRDS(file)
-  if (class(x) != "CFunc") stop(file, " does not contain a serialized CFunc object")
+  if (!inherits(x, "CFunc")) stop(file, " does not contain a serialized CFunc object")
 
   # Get code for restoring after updating the function body
   source_code <- x@code

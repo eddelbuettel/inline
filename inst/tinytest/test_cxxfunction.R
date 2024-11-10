@@ -3,7 +3,7 @@ library(inline)
 
 ## basic examples from manual page
 fx <- cxxfunction(signature(x = "integer", y = "numeric"),
-                  "return ScalarReal(INTEGER(x)[0] * REAL(y)[0]);")
+                  "return Rf_ScalarReal(INTEGER(x)[0] * REAL(y)[0]);")
 expect_true(is(fx, "CFunc"))
 expect_equal(fx(2L, 5), 10)
 

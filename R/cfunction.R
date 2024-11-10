@@ -106,7 +106,7 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   	  code <- paste( code, paste(body[[i]], collapse="\n"), sep="")
   	  ## CLOSE function, add return and warning in case the user forgot it
   	  code <- paste(code, "\n  ",
-                    ifelse(Rcpp, "Rf_warning", "warning"),
+                    ifelse(Rcpp || getRversion() >= "4.5.0", "Rf_warning", "warning"),
                     "(\"your C program does not return anything!\");\n  return R_NilValue;\n}\n", sep="");
     }
 
