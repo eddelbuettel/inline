@@ -61,7 +61,12 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
       cxxargs <- c(paste("-I", rcppdir, sep=""), cxxargs)	# prepend information from Rcpp
   }
   if (length(cppargs) != 0) {
-      args <- paste(cppargs, collapse=" ")
+      ## if we now set -DR_NO_REMAP, as CRAN does, but don't need to it in the Rcpp case
+      args <- paste(c(cppargs, if (Rcpp) "" else "-DR_NO_REMAP"), collapse=" ")
+      if (verbose) cat("Setting PKG_CPPFLAGS to", args, "\n")
+      Sys.setenv(PKG_CPPFLAGS=args)
+  } else if (!Rcpp) {
+      args <- "-DR_NO_REMAP"
       if (verbose) cat("Setting PKG_CPPFLAGS to", args, "\n")
       Sys.setenv(PKG_CPPFLAGS=args)
   }
@@ -105,9 +110,10 @@ cfunction <- function(sig=character(), body=character(), includes=character(), o
   	  ## add code, split lines
   	  code <- paste( code, paste(body[[i]], collapse="\n"), sep="")
   	  ## CLOSE function, add return and warning in case the user forgot it
-  	  code <- paste(code, "\n  ",
-                    ifelse(Rcpp || getRversion() >= "4.5.0", "Rf_warning", "warning"),
-                    "(\"your C program does not return anything!\");\n  return R_NilValue;\n}\n", sep="");
+          code <- paste(code,  ## as we (or Rcpp) set R_NO_REMAP we can use Rf_warning
+                        "\n  Rf_warning(\"your C program does not return anything!\");",
+                        "\n  return R_NilValue;\n}\n",
+                        sep="");
     }
 
     ## C/C++ with .C convention ************************************************
