@@ -3,13 +3,10 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/inline/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/inline/issues/#1}{##1}}
 
-\section{Changes in inline version 0.3.20 (2024-11-10)}{
+\section{Changes in inline version 0.3.21 (2025-01-08)}{
   \itemize{
-    \item Error message formatting is improved for \code{compileCode} (Alexis
-    Derumigny in \ghpr{25})
-    \item Switch to using Authors@R, other general packaging maintenance for
-    continuous integration and repository
-    \item Use \code{Rf_} in a handful of cases as R-devel now mandates it
+    \item Refine use of \code{Rf_warning} in \code{cfunction} setting \code{-DR_NO_REMAP}
+    ourselves to get R version independent state
   }
 }
 

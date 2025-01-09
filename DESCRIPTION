@@ -1,6 +1,6 @@
 Package: inline
-Version: 0.3.20
-Date: 2024-11-10
+Version: 0.3.21
+Date: 2025-01-08
 Title: Functions to Inline C, C++, Fortran Function Calls from R
 Authors@R: c(person("Oleg", "Sklyar", role = "aut"),
              person("Dirk", "Eddelbuettel", role = c("aut", "cre"), email = "edd@debian.org",
